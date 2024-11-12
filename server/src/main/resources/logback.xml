@@ -1,12 +1,20 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <!-- Use color codes based on log level -->
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %X{call-id} %highlight(%-5level) %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="trace">
-        <appender-ref ref="STDOUT"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
+
+    <logger name="ktor.server.logger" level="TRACE" additivity="false"/>
     <logger name="io.netty" level="INFO"/>
+
+    <!-- Suppress MongoDB logs -->
+    <Logger name="org.mongodb.driver" level="error" additivity="false">
+        <AppenderRef ref="Console"/>
+    </Logger>
 </configuration>
