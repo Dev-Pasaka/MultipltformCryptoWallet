@@ -2,16 +2,17 @@ package org.example.project.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import example.com.utils.JWTConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 
 fun Application.configureSecurity() {
     // Please read the jwt property from the config file if you are using EngineMain
-    val jwtAudience = "jwt-audience"
-    val jwtDomain = "https://jwt-provider-domain/"
-    val jwtRealm = "ktor sample app"
-    val jwtSecret = "secret"
+    val jwtAudience = JWTConfig.jwtAudience
+    val jwtDomain = JWTConfig.jwtDomain
+    val jwtRealm = JWTConfig.jwtSecret
+    val jwtSecret = JWTConfig.jwtSecret
     authentication {
         jwt {
             realm = jwtRealm

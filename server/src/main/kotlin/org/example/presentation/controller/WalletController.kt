@@ -1,5 +1,8 @@
 package org.example.presentation.controller
 
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.jwt.JWTPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -31,6 +34,18 @@ fun Route.walletController(
                 typeInfo = typeInfo<Any>(),
                 message = res
             )
+        }
+
+        authenticate {
+            get("/auth") {
+                val id = call.principal<JWTPrincipal>()?.payload?.getClaim("walletId").toString()
+                    .removeSurrounding("\"")
+                val res = walletService.getWallet(id)
+                call.respond(
+                    typeInfo = typeInfo<Any>(),
+                    message = res
+                )
+            }
         }
         post("/restore") {
             val req = call.receive<RecoverWalletReq>()

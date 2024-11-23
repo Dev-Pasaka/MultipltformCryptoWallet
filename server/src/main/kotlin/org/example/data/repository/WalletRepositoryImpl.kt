@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.example.common.utils.MongoDBConfig
+import org.example.domain.entries.User
 import org.example.domain.entries.Wallet
 import org.example.domain.entries.WalletSet
 import org.example.domain.repository.CircleRepository
 import org.example.domain.repository.EncryptionRepository
+import org.example.domain.repository.UserRepository
 import org.example.domain.repository.WalletRepository
 import org.example.presentation.dto.response.CreateWalletRes
 import org.example.presentation.dto.response.GetWalletRes
@@ -26,17 +28,20 @@ class WalletRepositoryImpl(
     private val db: MongoDBConfig,
     private val circleRepository: CircleRepository,
     private val encryptionRepository: EncryptionRepository,
+    private val userRepository: Lazy<UserRepository>
 ) : WalletRepository {
 
     private val walletSetCollection = db.database.getCollection<WalletSet>("wallet_set")
     private val walletCollection = db.database.getCollection<Wallet>("wallet")
+    private val userCollection = db.database.getCollection<User>("user")
+
 
     override suspend fun createWalletSet(): Pair<Boolean, String> {
 
         val doesWalletSetExist = walletSetCollection.find().toList().firstOrNull()
         if (doesWalletSetExist != null) return Pair(false, "Wallet set already exists")
 
-        val idempotencyKey = java.util.UUID.randomUUID().toString()
+        val idempotencyKey = UUID.randomUUID().toString()
         val createWalletSetRes = circleRepository.createWalletSets(
             idempotencyKey = idempotencyKey,
             name = "kotlin-conf-25-test-wallet-set"
@@ -73,12 +78,15 @@ class WalletRepositoryImpl(
                 walletCollection.find(Filters.eq(Wallet::idempotencyKey.name, idempotencyKey))
                     .toList()
 
-            if (doesWalletExist.isNotEmpty()) return@withContext CreateWalletRes(
-                httpStatusCode = HttpStatusCode.OK.value,
-                status = true,
-                message = "Wallet already exists",
-                wallet = doesWalletExist.map { it.toGetWalletRes() },
-            )
+            if (doesWalletExist.isNotEmpty()){
+
+                return@withContext CreateWalletRes(
+                    httpStatusCode = HttpStatusCode.OK.value,
+                    status = true,
+                    message = "Wallet already exists",
+                    wallet = doesWalletExist.map { it.toGetWalletRes() },
+                )
+            }
             val createWallet = circleRepository.createWallet(
                 walletSetId = doesWalletSetExist.id,
                 idempotencyKey = idempotencyKey
@@ -114,6 +122,15 @@ class WalletRepositoryImpl(
                 )
             }
 
+            launch {
+                userCollection.insertOne(
+                    User(
+                        walletId = generalWalletId,
+                        idempotencyKey = idempotencyKey
+                    )
+                )
+            }
+
             return@withContext CreateWalletRes(
                 httpStatusCode = HttpStatusCode.OK.value,
                 status = true,
@@ -136,12 +153,14 @@ class WalletRepositoryImpl(
         val wallet = walletCollection.find(
             Filters.eq(Wallet::id.name, id)
         ).toList()
+
         if (wallet.isEmpty()) return@withContext GetWalletRes(
             httpStatusCode = HttpStatusCode.BadRequest.value,
             status = false,
             message = "Wallet not found",
             data = null
         )
+
 
         GetWalletRes(
             httpStatusCode = HttpStatusCode.OK.value,
@@ -153,7 +172,8 @@ class WalletRepositoryImpl(
 
     override suspend fun restoreWallet(recoverCode: String): RestoreWalletRes =
         withContext(Dispatchers.IO) {
-            val existingWallets = walletCollection.find(Filters.eq(Wallet::recoveryCode.name, recoverCode)).toList()
+            val existingWallets =
+                walletCollection.find(Filters.eq(Wallet::recoveryCode.name, recoverCode)).toList()
             if (existingWallets.isEmpty()) {
                 return@withContext RestoreWalletRes(
                     httpStatusCode = HttpStatusCode.BadRequest.value,
@@ -180,7 +200,8 @@ class WalletRepositoryImpl(
                 )
             }
 
-            val restoredWallets = walletCollection.find(Filters.eq(Wallet::id.name, newWalletId)).toList()
+            val restoredWallets =
+                walletCollection.find(Filters.eq(Wallet::id.name, newWalletId)).toList()
 
             return@withContext RestoreWalletRes(
                 httpStatusCode = HttpStatusCode.OK.value,

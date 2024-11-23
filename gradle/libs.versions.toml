@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -61,6 +61,9 @@ ktor-server-auth = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "kto
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor-version" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor-version" }
 ktor-mockk = { module = "io.mockk:mockk", version.ref = "ktor-mockk"}
+
+
+
 #MongDB
 mongodb-core = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodb-ktor" }
 mongodb-serializer = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodb-ktor" }

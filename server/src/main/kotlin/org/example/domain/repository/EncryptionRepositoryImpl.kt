@@ -3,6 +3,7 @@ package org.example.domain.repository
 import example.com.utils.CircleConfig
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Hex
+import org.mindrot.jbcrypt.BCrypt
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.Security
@@ -10,8 +11,8 @@ import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
 
-class EncryptionRepositoryImpl(): EncryptionRepository {
-    override suspend fun encryptEntitySecrete(publicKey: String, entitySecrete:String): String {
+class EncryptionRepositoryImpl() : EncryptionRepository {
+    override suspend fun encryptEntitySecrete(publicKey: String, entitySecrete: String): String {
         // Add Bouncy Castle as a Security Provider
         Security.addProvider(BouncyCastleProvider())
 
@@ -32,6 +33,13 @@ class EncryptionRepositoryImpl(): EncryptionRepository {
         return UUID.randomUUID().toString()
     }
 
+    override fun hashPassword(password: String): String = BCrypt.hashpw(password, BCrypt.gensalt())
+
+
+    override fun verifyHashedPassword(password: String, hashedPassword: String): Boolean =
+        BCrypt.checkpw(password, hashedPassword)
+
+
     private fun loadPublicKeyFromPem(pem: String): PublicKey {
         val pemFormatted = pem
             .replace("-----BEGIN PUBLIC KEY-----", "")
@@ -49,5 +57,6 @@ class EncryptionRepositoryImpl(): EncryptionRepository {
         cipher.init(Cipher.ENCRYPT_MODE, publicKey)
         return cipher.doFinal(data)
     }
+
 
 }
