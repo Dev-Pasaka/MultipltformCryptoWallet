@@ -8,6 +8,6 @@ object MongoDBConfig {
     private val password:String = System.getenv("MONGODBPASSWORD") ?: ""
     private val url = "mongodb+srv://$username:$password@coinxdevdb.poozy2d.mongodb.net/"
     private val databaseName = System.getenv("DATABASENAME") ?: ""
-    private val mongoClient = MongoClient.create(url)
+    private val mongoClient by lazy {  MongoClient.create(url)}
     val database = mongoClient.getDatabase(databaseName)
 }

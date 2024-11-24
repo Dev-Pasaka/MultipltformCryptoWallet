@@ -16,7 +16,7 @@ junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
 #Ktor-server
-ktor-version = "3.0.0"
+ktor-version = "3.0.1"
 logback = "1.5.11"
 koin-version = "3.5.6"
 mongodb-ktor = "5.1.2"
@@ -61,6 +61,7 @@ ktor-server-auth = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "kto
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor-version" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor-version" }
 ktor-mockk = { module = "io.mockk:mockk", version.ref = "ktor-mockk"}
+ktor-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor-version"}
 
 
 

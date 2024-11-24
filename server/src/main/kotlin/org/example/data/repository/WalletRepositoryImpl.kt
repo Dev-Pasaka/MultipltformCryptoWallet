@@ -5,10 +5,12 @@ import com.mongodb.client.model.Updates
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.bson.Document
 import org.example.common.utils.MongoDBConfig
 import org.example.domain.entries.User
 import org.example.domain.entries.Wallet
@@ -22,6 +24,7 @@ import org.example.presentation.dto.response.GetWalletRes
 import org.example.presentation.dto.response.RestoreWalletRes
 import org.example.presentation.dto.response.RestoreWalletSecrete
 import org.example.presentation.dto.response.SecretsRes
+import org.example.presentation.dto.response.WalletSearchRes
 import java.util.UUID
 
 class WalletRepositoryImpl(
@@ -78,7 +81,7 @@ class WalletRepositoryImpl(
                 walletCollection.find(Filters.eq(Wallet::idempotencyKey.name, idempotencyKey))
                     .toList()
 
-            if (doesWalletExist.isNotEmpty()){
+            if (doesWalletExist.isNotEmpty()) {
 
                 return@withContext CreateWalletRes(
                     httpStatusCode = HttpStatusCode.OK.value,
@@ -214,6 +217,42 @@ class WalletRepositoryImpl(
                 data = restoredWallets.map { it.toGetWalletRes() }
             )
         }
+
+    override suspend fun searchWallet(searchText: String): Flow<WalletSearchRes> = flow {
+        val searchQuery = listOf(
+            Document(
+                "\$search", Document()
+                    .append("index", "user_search")
+                    .append(
+                        "text", Document()
+                            .append("query", searchText)
+                            .append("path", listOf("email", "phone", "username"))
+                            .append(
+                                "fuzzy", Document()
+                                    .append("maxEdits", 2)
+                                    .append("prefixLength", 2)
+                            )
+                    )
+            )
+        )
+
+        try {
+            userCollection.aggregate(searchQuery).collect { user ->
+                println("MongoDB Search Result: $user")
+                val wallet = walletCollection.find(Filters.eq(Wallet::id.name, user.walletId))
+                val result = WalletSearchRes(
+                    status = wallet.toList().isNotEmpty(),
+                    message = "Search results",
+                    username = user.username,
+                    data = wallet.toList().map { it.toWalletSearch() }
+                )
+                emit(result)
+            }
+        } catch (e: Exception) {
+            println("Error during aggregation: ${e.message}")
+        }
+    }
+
 
     init {
         CoroutineScope(Dispatchers.IO).launch { createWalletSet() }

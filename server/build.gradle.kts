@@ -44,4 +44,5 @@ dependencies {
     implementation(libs.ktor.redis)
     implementation(libs.ktor.micrometrics)
     implementation(libs.ktor.prometheus)
+    implementation(libs.ktor.websockets)
 }

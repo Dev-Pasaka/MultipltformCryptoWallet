@@ -13,7 +13,7 @@ fun Application.configureSecurity() {
     val jwtDomain = JWTConfig.jwtDomain
     val jwtRealm = JWTConfig.jwtSecret
     val jwtSecret = JWTConfig.jwtSecret
-    authentication {
+    install(Authentication) {
         jwt {
             realm = jwtRealm
             verifier(
@@ -27,5 +27,6 @@ fun Application.configureSecurity() {
                 if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
             }
         }
+
     }
 }

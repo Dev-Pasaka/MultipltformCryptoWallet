@@ -1,4 +1,4 @@
-package example.com.application.plugins
+package org.example.project.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.metrics.micrometer.*
