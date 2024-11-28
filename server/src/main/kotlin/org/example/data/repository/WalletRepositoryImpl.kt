@@ -6,6 +6,7 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ import org.example.domain.repository.EncryptionRepository
 import org.example.domain.repository.UserRepository
 import org.example.domain.repository.WalletRepository
 import org.example.presentation.dto.response.CreateWalletRes
+import org.example.presentation.dto.response.GetWalletBalanceRes
 import org.example.presentation.dto.response.GetWalletRes
 import org.example.presentation.dto.response.RestoreWalletRes
 import org.example.presentation.dto.response.RestoreWalletSecrete
@@ -252,6 +254,36 @@ class WalletRepositoryImpl(
             println("Error during aggregation: ${e.message}")
         }
     }
+
+    override suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes =
+        withContext(Dispatchers.IO) {
+
+            val wallet = walletCollection.find(Filters.eq(Wallet::id.name, walletId)).firstOrNull()
+                ?: return@withContext GetWalletBalanceRes(
+                    httpStatusCode = HttpStatusCode.BadRequest.value,
+                    status = false,
+                    message = "Wallet not found",
+                    data = null
+                )
+
+            val walletBalance = try {
+                circleRepository.getWalletBalance(wallet.walletId)
+            } catch (e: Exception) {
+                null
+            } ?: return@withContext GetWalletBalanceRes(
+                httpStatusCode = HttpStatusCode.BadRequest.value,
+                status = false,
+                message = "Failed to get wallet balance",
+                data = null
+            )
+            GetWalletBalanceRes(
+                httpStatusCode = HttpStatusCode.OK.value,
+                status = true,
+                message = "Wallet balance retrieved successfully",
+                data = walletBalance
+            )
+
+        }
 
 
     init {

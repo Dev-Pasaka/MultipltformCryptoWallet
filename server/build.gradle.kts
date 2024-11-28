@@ -1,8 +1,11 @@
+import org.gradle.internal.impldep.jcifs.dcerpc.rpc
+
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
     application
+    alias(libs.plugins.kotlinx.rpc)
 }
 
 group = "org.example.project"
@@ -45,4 +48,8 @@ dependencies {
     implementation(libs.ktor.micrometrics)
     implementation(libs.ktor.prometheus)
     implementation(libs.ktor.websockets)
+    implementation(libs.kotlinx.rpc.server)
+    implementation(libs.kotlinx.rpc.client)
+    implementation(libs.kotlinx.rpc.serialization)
+    implementation(libs.ktor.cors)
 }

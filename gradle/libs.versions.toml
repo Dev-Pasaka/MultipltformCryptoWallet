@@ -28,6 +28,8 @@ kotlin-encryption = "1.70"
 ktor-mockk = "1.13.3"
 redis  = "5.1.2"
 prometheus_version = "1.13.3"
+kotlinx-rpc = "0.4.0"
+
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -62,6 +64,10 @@ ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.re
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor-version" }
 ktor-mockk = { module = "io.mockk:mockk", version.ref = "ktor-mockk"}
 ktor-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor-version"}
+#Kotlix-rpc
+kotlinx-rpc-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-server", version.ref = "kotlinx-rpc"}
+kotlinx-rpc-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-client", version.ref = "kotlinx-rpc"}
+kotlinx-rpc-serialization = { module = "org.jetbrains.kotlinx:kotlinx-rpc-krpc-serialization-json", version.ref = "kotlinx-rpc"}
 
 
 
@@ -89,6 +95,7 @@ ktor-redis = {  module = "redis.clients:jedis", version.ref = "redis" }
 ktor-metrics = {module = "io.ktor:ktor-metrics", version.ref = "ktor-version"}
 ktor-micrometrics = {module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor-version"}
 ktor-prometheus = {module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus_version"}
+ktor-cors =  { module = "io.ktor:ktor-server-cors", version.ref = "ktor-version"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -98,3 +105,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinx-rpc = {id = "org.jetbrains.kotlinx.rpc.plugin", version.ref = "kotlinx-rpc"}

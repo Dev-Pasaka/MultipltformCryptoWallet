@@ -8,7 +8,7 @@ data class TransferCryptoReq(
     val destinationAddress: String,
     val entitySecretCipherText: String = "",
     val idempotencyKey: String,
-    val feeLevel: String = "MEDIUM",
+    val feeLevel: String = "HIGH",
     val walletId: String,
     val tokenId:String = "",
 )

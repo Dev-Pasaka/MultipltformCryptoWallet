@@ -3,6 +3,7 @@ package org.example.project.plugins
 
 import org.example.di.configModule
 import io.ktor.server.application.*
+import org.example.di.channelModule
 import org.example.di.repositoryModule
 import org.example.di.serviceModule
 import org.example.di.useCaseModule
@@ -17,7 +18,8 @@ fun Application.configureKoin() {
                 useCaseModule,
                 repositoryModule,
                 serviceModule,
-                configModule
+                configModule,
+                channelModule
             )
         )
     }

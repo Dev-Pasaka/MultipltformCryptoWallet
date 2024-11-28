@@ -48,6 +48,7 @@ fun Route.walletController(
             get("/auth") {
                 val id = call.principal<JWTPrincipal>()?.payload?.getClaim("walletId").toString()
                     .removeSurrounding("\"")
+                println("Wallet id: $id")
                 val res = walletService.getWallet(id)
                 call.respond(
                     typeInfo = typeInfo<Any>(),
@@ -64,7 +65,26 @@ fun Route.walletController(
             )
         }
 
+        get("/balance") {
+            val walletId = call.parameters["walletId"] ?: ""
+            val res = walletService.getWalletBalance(walletId)
+            call.respond(
+                typeInfo = typeInfo<Any>(),
+                message = res
+            )
+        }
 
+        authenticate {
+            get("/balance/auth") {
+                val walletId = call.principal<JWTPrincipal>()?.payload?.getClaim("walletId").toString()
+                .removeSurrounding("\"")
+                val res = walletService.getWalletBalance(walletId)
+                call.respond(
+                    typeInfo = typeInfo<Any>(),
+                    message = res
+                )
+            }
+        }
 
 
     }
@@ -79,7 +99,14 @@ fun Route.walletController(
                         .onStart { send(Frame.Text("Search started...")) }
                         .onCompletion { send(Frame.Text("Search completed.")) }
                         .collect { result ->
-                            send(Frame.Text(Json.encodeToString(WalletSearchRes.serializer(), result))) // Stream each result to the client
+                            send(
+                                Frame.Text(
+                                    Json.encodeToString(
+                                        WalletSearchRes.serializer(),
+                                        result
+                                    )
+                                )
+                            ) // Stream each result to the client
                         }
                 } catch (e: Exception) {
                     send(Frame.Text("Error occurred: ${e.message}"))
@@ -87,5 +114,6 @@ fun Route.walletController(
             }
         }
     }
+
 
 }

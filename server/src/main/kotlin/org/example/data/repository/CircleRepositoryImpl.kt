@@ -147,7 +147,6 @@ class CircleRepositoryImpl(
             publicKey = publicKey.data?.publicKey ?: "",
             entitySecrete = circle.entitySecret
         )
-        val walletBalance = getWalletBalance(body.walletId)
         try {
             val result = api.client.post(urlString = "${circle.baseUrl}developer/transactions/transfer") {
                 header(HttpHeaders.Authorization, "Bearer ${circle.apiKey}")
@@ -155,12 +154,12 @@ class CircleRepositoryImpl(
                 setBody(
                     body.copy(
                         entitySecretCipherText = entitySecretCiphertext,
-                        tokenId = walletBalance.data.tokenBalances.first().token.id
+                        tokenId = body.tokenId
                     )
                 )
-            }.bodyAsText()
+            }.body<TransferCryptoRes>()
             println(result)
-            TransferCryptoRes()
+            result
 
 
         }catch (e:Exception){
