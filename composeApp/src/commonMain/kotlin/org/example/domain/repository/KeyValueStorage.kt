@@ -1,4 +1,4 @@
-package org.example.domain
+package org.example.domain.repository
 
 interface KeyValueStorage {
     suspend fun putString(key: String, value: String): Boolean

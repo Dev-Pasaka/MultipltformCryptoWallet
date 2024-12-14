@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -44,8 +45,6 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
-
-            implementation(libs.kotlinx.serialization.json)
             implementation(libs.kottie)
             implementation(libs.materialKolor)
             implementation(libs.androidx.constraintlayout)
@@ -53,8 +52,11 @@ kotlin {
             implementation(libs.kmpalette.core)
             api(libs.datastore.preferences)
             api(libs.datastore)
-            implementation(libs.ktor.client.okhttp)
-
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.serialization.kotlinx.json)
+            implementation(libs.ktor.client.auth)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.example.domain.KeyValueStorage
+import org.example.domain.repository.KeyValueStorage
 
 class KeyValueStorageImpl(
     private val dataStore: DataStore<Preferences>

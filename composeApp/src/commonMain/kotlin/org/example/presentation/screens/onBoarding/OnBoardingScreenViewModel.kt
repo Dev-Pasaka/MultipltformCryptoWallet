@@ -1,23 +1,20 @@
 package org.example.presentation.screens.onBoarding
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cryptowallet.composeapp.generated.resources.Res
 import cryptowallet.composeapp.generated.resources.bitcoin
-import cryptowallet.composeapp.generated.resources.compose_multiplatform
 import cryptowallet.composeapp.generated.resources.ethereum
 import cryptowallet.composeapp.generated.resources.tether
-import kotlinx.coroutines.launch
-import org.example.domain.KeyValueStorage
-import androidx.compose.runtime.getValue
+import org.example.domain.repository.KeyValueStorage
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import org.example.common.Resource
+import org.example.domain.usecase.wallet.CreateWalletUseCase
 
 class OnBoardingScreenViewModel(
-    private val keyValueStorage: KeyValueStorage
+    private val keyValueStorage: KeyValueStorage,
+    private val createWalletUseCase: CreateWalletUseCase
 ): ViewModel() {
     val onBoardingData  = mutableStateListOf(
         OnBoardingData(
@@ -36,4 +33,24 @@ class OnBoardingScreenViewModel(
             image = Res.drawable.tether
         ),
     )
+
+    init {
+
+        viewModelScope.launch {
+            createWalletUseCase("99404ae7-8363-4c47-87f3-be05c9d779c3").collect{
+                when(it){
+                    is Resource.Error -> {
+                        println(it.message)
+                    }
+                    is Resource.Loading -> {
+                        println(it.message)
+                    }
+                    is Resource.Success -> {
+                        println(it.data)
+                    }
+                }
+            }
+        }
+
+    }
 }

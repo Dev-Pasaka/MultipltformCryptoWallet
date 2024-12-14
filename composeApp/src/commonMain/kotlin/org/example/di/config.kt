@@ -2,6 +2,7 @@ package org.example.di
 
 import org.example.data.local.DATA_STORE_FILE_NAME
 import org.example.data.local.createDataStore
+import org.example.data.remote.KtorClient
 import org.koin.dsl.module
 
 val config = module {
@@ -9,5 +10,9 @@ val config = module {
         createDataStore {
             DATA_STORE_FILE_NAME
         }
+    }
+
+    single {
+        KtorClient
     }
 }

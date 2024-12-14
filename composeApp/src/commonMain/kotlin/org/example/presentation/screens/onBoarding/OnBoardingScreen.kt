@@ -45,11 +45,6 @@ fun OnBoardingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = viewModel.state,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.headlineLarge
-            )
             OnBoardingScreenUpperSection(
                 actionRegister = {
 

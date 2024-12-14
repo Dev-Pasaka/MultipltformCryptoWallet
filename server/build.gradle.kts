@@ -1,3 +1,6 @@
+import io.ktor.plugin.features.DockerImageRegistry
+import io.ktor.plugin.features.DockerPortMapping
+import io.ktor.plugin.features.DockerPortMappingProtocol
 import org.gradle.internal.impldep.jcifs.dcerpc.rpc
 
 plugins {
@@ -14,6 +17,54 @@ application {
     mainClass.set("org.example.project.ApplicationKt")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["io.ktor.development"] ?: "false"}")
 }
+
+
+
+tasks {
+    create("stage").dependsOn("installDist")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("smartpesa.jar")
+    }
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "org.example.project.ApplicationKt" // Replace with your main class
+    }
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+
+ktor {
+    docker {
+        jreVersion.set(JavaVersion.VERSION_17)
+        localImageName.set("pasaka/smartpesa")
+        this.imageTag.set("latest")
+        portMappings.set(
+            listOf(
+                DockerPortMapping(
+                    8080,
+                    8080,
+                    DockerPortMappingProtocol.TCP
+                )
+            )
+        )
+        externalRegistry.set(
+            DockerImageRegistry.dockerHub(
+                appName = provider { "ktor-app" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
+    }
+}
+
 
 dependencies {
     implementation(projects.shared)
@@ -41,7 +92,6 @@ dependencies {
     implementation(libs.geo.ip)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.content.negotiation)
     implementation(libs.kotlin.aws.s3)
     implementation(libs.kotlin.encryption)
     implementation(libs.ktor.redis)
@@ -52,4 +102,5 @@ dependencies {
     implementation(libs.kotlinx.rpc.client)
     implementation(libs.kotlinx.rpc.serialization)
     implementation(libs.ktor.cors)
+    implementation(libs.ktor.client.content.negotiation)
 }
