@@ -1,26 +1,26 @@
-name: Docker Deploy to EC2
+name: Deploy to EC2
 
 on:
-  push:
-    branches:
-      - main  # Trigger the workflow when pushing to the main branch
-  pull_request:
-    branches:
-      - main  # Trigger the workflow on pull requests to the main branch
+  workflow_run:
+    workflows: ["Docker Build and Push"]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: SSH to EC2 and deploy container
+      - name: Deploy Docker Compose to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no workflow@52.57.41.193 << 'EOF'
+          ssh -o StrictHostKeyChecking=no workflows@${{ secrets.EC2_HOST }} << 'EOF'
             # Pull the latest Docker image from Docker Hub
-
           EOF
