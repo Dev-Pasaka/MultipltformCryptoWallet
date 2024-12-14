@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy Docker Compose to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa workflows@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             # Pull the latest Docker image from Docker Hub
             docker-compose pull
             # Restart the Docker Compose service
