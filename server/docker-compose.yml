@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  smartpesa:
+    image: smartpesa:latest  # Replace with your image name or tag if different
+    container_name: smartpesa-app
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - smartpesa-network
+    volumes:
+      - ./app_data:/app_data  # Optional: Volume to persist application data if required
+networks:
+  smartpesa-network:
+    driver: bridge

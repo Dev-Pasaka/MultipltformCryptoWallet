@@ -1,7 +1,5 @@
-import io.ktor.plugin.features.DockerImageRegistry
 import io.ktor.plugin.features.DockerPortMapping
 import io.ktor.plugin.features.DockerPortMappingProtocol
-import org.gradle.internal.impldep.jcifs.dcerpc.rpc
 
 plugins {
     alias(libs.plugins.kotlinJvm)
@@ -53,13 +51,6 @@ ktor {
                     8080,
                     DockerPortMappingProtocol.TCP
                 )
-            )
-        )
-        externalRegistry.set(
-            DockerImageRegistry.dockerHub(
-                appName = provider { "ktor-app" },
-                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
             )
         )
     }
