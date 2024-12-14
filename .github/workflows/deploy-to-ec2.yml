@@ -16,15 +16,20 @@ jobs:
 
       - name: Set up SSH
         run: |
+          # Create the .ssh directory if it doesn't exist
           mkdir -p ~/.ssh
+          # Store the private key from GitHub secrets as the SSH key
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          # Add the EC2 host to known hosts to avoid host verification errors
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy Docker Compose to EC2
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            # Pull the latest Docker image from Docker Hub
+          # Run the SSH command with the correct private key and host
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no workflow@${{ secrets.EC2_HOST }} << 'EOF'
+            # Add your deploy commands here
+            echo "Deploying Docker Compose on EC2"
             docker-compose pull
-            # Restart the Docker Compose service
             docker-compose up -d
           EOF
