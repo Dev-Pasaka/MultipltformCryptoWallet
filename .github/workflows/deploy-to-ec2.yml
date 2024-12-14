@@ -15,12 +15,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: Deploy Docker Compose to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no workflows@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa workflows@${{ secrets.EC2_HOST }} << 'EOF'
             # Pull the latest Docker image from Docker Hub
+            docker-compose pull
+            # Restart the Docker Compose service
+            docker-compose up -d
           EOF
