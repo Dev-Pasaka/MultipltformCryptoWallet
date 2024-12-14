@@ -41,7 +41,7 @@ tasks.withType<Jar> {
 
 ktor {
     docker {
-        jreVersion.set(JavaVersion.VERSION_17)
+        jreVersion.set(JavaVersion.VERSION_21)
         localImageName.set("pasaka/smartpesa")
         this.imageTag.set("latest")
         portMappings.set(
