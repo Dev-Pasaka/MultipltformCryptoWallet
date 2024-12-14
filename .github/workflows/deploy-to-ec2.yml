@@ -28,8 +28,9 @@ jobs:
         run: |
           # Run the SSH command with the correct private key and host
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no workflow@${{ secrets.EC2_HOST }} << 'EOF'
-            # Add your deploy commands here
-            echo "Deploying Docker Compose on EC2"
+            # Navigate to the smart-pesa directory
+            cd smartpesa || exit
+            # Pull and start the Docker containers in detached mode
             docker-compose pull
             docker-compose up -d
           EOF
