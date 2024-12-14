@@ -37,6 +37,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # Build the JAR file using Gradle
+      - name: Build the application JAR
+        run: ./gradlew buildFatJar
+
       # Build the Docker image
       - name: Build Docker image
         run: docker build -t ${DOCKER_HUB_USERNAME}/smartpesa:latest .
