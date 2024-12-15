@@ -7,15 +7,24 @@ import cryptowallet.composeapp.generated.resources.ethereum
 import cryptowallet.composeapp.generated.resources.tether
 import org.example.domain.repository.KeyValueStorage
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.example.common.Resource
+import org.example.common.generateUUID
 import org.example.domain.usecase.wallet.CreateWalletUseCase
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class OnBoardingScreenViewModel(
-    private val keyValueStorage: KeyValueStorage,
     private val createWalletUseCase: CreateWalletUseCase
 ): ViewModel() {
+
+    var createWalletState by mutableStateOf(CreateWalletState())
+        private set
+    var importWalletState by mutableStateOf(ImportWalletState())
+        private set
+
     val onBoardingData  = mutableStateListOf(
         OnBoardingData(
             title = "Lets get started",
@@ -34,19 +43,73 @@ class OnBoardingScreenViewModel(
         ),
     )
 
-    init {
 
+    fun createWallet() {
+        val uuid = generateUUID()
         viewModelScope.launch {
-            createWalletUseCase("99404ae7-8363-4c47-87f3-be05c9d779c3").collect{
-                when(it){
+            createWalletUseCase(uuid).collect{result ->
+                when(result){
                     is Resource.Error -> {
-                        println(it.message)
+                        createWalletState = createWalletState.copy(
+                            isLoading = false,
+                            isSuccess = false,
+                            errorMessage = result.message
+                            )
                     }
                     is Resource.Loading -> {
-                        println(it.message)
+                        createWalletState = createWalletState.copy(
+                            isLoading = true,
+                            isSuccess = false,
+                            errorMessage = null
+                        )
+                        println("Loading")
+                    }
+
+                    is Resource.Success -> {
+                        createWalletState = createWalletState.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            errorMessage = null,
+                            recoverCode = result.data?.recoverCode
+                        )
+                        println("Wallet: " + result.data)
+                    }
+                }
+            }
+        }
+
+    }
+
+    fun importWallet(recoverCode: String){
+        viewModelScope.launch {
+            createWalletUseCase(recoverCode).collect { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        importWalletState = importWalletState.copy(
+                            isLoading = false,
+                            isSuccess = false,
+                            errorMessage = result.message,
+                            recoverCode = null
+                        )
+                        println("Error:" + result.message)
+                    }
+                    is Resource.Loading -> {
+                        importWalletState = importWalletState.copy(
+                            isLoading = true,
+                            isSuccess = false,
+                            errorMessage = null,
+                            recoverCode = null
+                        )
+                        println("Loading")
                     }
                     is Resource.Success -> {
-                        println(it.data)
+                        importWalletState = importWalletState.copy(
+                            isLoading = false,
+                            isSuccess = true,
+                            errorMessage = null,
+                            recoverCode = result.data?.recoverCode
+                        )
+                        println("Wallet Recoverycode: " + result.data)
                     }
                 }
             }

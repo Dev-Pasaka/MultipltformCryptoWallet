@@ -57,6 +57,7 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.serialization.kotlinx.json)
             implementation(libs.ktor.client.auth)
+            implementation(libs.kmp.uuid)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

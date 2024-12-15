@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun  OnBoardingScreenLowerSection(
-    actionGetStarted: () -> Unit
+    onCreateWallet: () -> Unit,
+    onImportWallet: () -> Unit
 ) {
     Column {
         Row(
@@ -37,7 +38,7 @@ fun  OnBoardingScreenLowerSection(
         ) {
             Surface(
                 elevation = 24.dp,
-                onClick = actionGetStarted,
+                onClick = onCreateWallet,
                 shape = RoundedCornerShape(32.dp),
                 color = MaterialTheme.colorScheme.primary
             ) {
@@ -65,7 +66,7 @@ fun  OnBoardingScreenLowerSection(
         ) {
             Surface(
                 elevation = 24.dp,
-                onClick = actionGetStarted,
+                onClick = onImportWallet,
                 shape = RoundedCornerShape(32.dp),
                 border = BorderStroke(
                     width = 1.dp,
