@@ -13,7 +13,7 @@ data class CreateWalletRes(
 ){
     fun toWalletSecret() = WalletSecrete(
         id = secrets?.id ?: "",
-        recoverCode = secrets?.recoverCode ?: ""
+        recoveryCode = secrets?.recoverCode ?: ""
     )
 
 }

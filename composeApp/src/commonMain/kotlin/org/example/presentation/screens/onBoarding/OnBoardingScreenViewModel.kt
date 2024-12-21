@@ -5,7 +5,6 @@ import cryptowallet.composeapp.generated.resources.Res
 import cryptowallet.composeapp.generated.resources.bitcoin
 import cryptowallet.composeapp.generated.resources.ethereum
 import cryptowallet.composeapp.generated.resources.tether
-import org.example.domain.repository.KeyValueStorage
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -70,7 +69,7 @@ class OnBoardingScreenViewModel(
                             isLoading = false,
                             isSuccess = true,
                             errorMessage = null,
-                            recoverCode = result.data?.recoverCode
+                            recoverCode = result.data?.recoveryCode
                         )
                         println("Wallet: " + result.data)
                     }
@@ -81,6 +80,7 @@ class OnBoardingScreenViewModel(
     }
 
     fun importWallet(recoverCode: String){
+        println("RecoveryCode: $recoverCode")
         viewModelScope.launch {
             createWalletUseCase(recoverCode).collect { result ->
                 when (result) {
@@ -107,7 +107,7 @@ class OnBoardingScreenViewModel(
                             isLoading = false,
                             isSuccess = true,
                             errorMessage = null,
-                            recoverCode = result.data?.recoverCode
+                            recoverCode = result.data?.recoveryCode
                         )
                         println("Wallet Recoverycode: " + result.data)
                     }

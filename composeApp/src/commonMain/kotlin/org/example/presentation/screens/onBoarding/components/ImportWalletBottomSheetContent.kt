@@ -16,7 +16,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -155,7 +154,7 @@ fun ImportWalletBottomSheet(
                     .padding(bottom = 48.dp)
             ) {
                 AnimatedVisibility(
-                    visible = walletSecrete.recoverCode.isBlank() && isWalletImporting,
+                    visible = walletSecrete.recoveryCode.isBlank() && isWalletImporting,
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(32.dp),
@@ -165,18 +164,18 @@ fun ImportWalletBottomSheet(
                 }
 
                 Text(
-                    text = walletSecrete.recoverCode,
+                    text = walletSecrete.recoveryCode,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Spacer(
                     modifier = Modifier.width(8.dp)
                 )
-                AnimatedVisibility(walletSecrete.recoverCode.isNotBlank()){
+                AnimatedVisibility(walletSecrete.recoveryCode.isNotBlank()){
                     IconButton(
                         onClick = {
                             clipboardManager.setText(
                                 annotatedString = buildAnnotatedString {
-                                    append(text = walletSecrete.recoverCode)
+                                    append(text = walletSecrete.recoveryCode)
                                 }
                             )
                         }

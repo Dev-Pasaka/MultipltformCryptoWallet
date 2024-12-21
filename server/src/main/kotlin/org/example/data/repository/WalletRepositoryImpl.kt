@@ -192,7 +192,7 @@ class WalletRepositoryImpl(
 
             val updateResult = walletCollection.updateMany(
                 Filters.eq(Wallet::recoveryCode.name, recoverCode),
-                listOf(
+                Updates.combine(
                     Updates.set(Wallet::id.name, newWalletId),
                     Updates.set(Wallet::recoveryCode.name, newRecoveryCode)
                 )
