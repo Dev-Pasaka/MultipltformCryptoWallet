@@ -11,8 +11,11 @@ data class ImportWalletRes(
     val secrets: Secrets,
     val status: Boolean
 ){
-    fun toWalletSecrete() = WalletSecrete(
-        id = secrets.id,
-        recoverCode = secrets.recoverCode
-    )
+    fun toWalletSecrete():WalletSecrete {
+        println("secrets: $secrets")
+        return WalletSecrete(
+            id = secrets.id,
+            recoverCode = secrets.recoverCode
+        )
+    }
 }

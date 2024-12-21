@@ -188,12 +188,13 @@ class WalletRepositoryImpl(
             }
 
             val newWalletId = UUID.randomUUID().toString()
+            val newRecoveryCode = UUID.randomUUID().toString()
 
             val updateResult = walletCollection.updateMany(
                 Filters.eq(Wallet::recoveryCode.name, recoverCode),
                 listOf(
                     Updates.set(Wallet::id.name, newWalletId),
-                    Updates.set(Wallet::recoveryCode.name, UUID.randomUUID().toString())
+                    Updates.set(Wallet::recoveryCode.name, newRecoveryCode)
                 )
             ).wasAcknowledged()
 
@@ -214,7 +215,7 @@ class WalletRepositoryImpl(
                 message = "Wallet restored successfully",
                 secrets = RestoreWalletSecrete(
                     id = newWalletId,
-                    recoverCode = recoverCode
+                    recoverCode = newRecoveryCode
                 ),
                 data = restoredWallets.map { it.toGetWalletRes() }
             )
