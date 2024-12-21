@@ -14,9 +14,11 @@ import org.example.common.generateUUID
 import org.example.domain.usecase.wallet.CreateWalletUseCase
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import org.example.domain.usecase.wallet.ImportWalletUseCase
 
 class OnBoardingScreenViewModel(
-    private val createWalletUseCase: CreateWalletUseCase
+    private val createWalletUseCase: CreateWalletUseCase,
+    private val importWalletUseCase: ImportWalletUseCase
 ): ViewModel() {
 
     var createWalletState by mutableStateOf(CreateWalletState())
@@ -82,7 +84,7 @@ class OnBoardingScreenViewModel(
     fun importWallet(recoverCode: String){
         println("RecoveryCode: $recoverCode")
         viewModelScope.launch {
-            createWalletUseCase(recoverCode).collect { result ->
+            importWalletUseCase(recoverCode).collect { result ->
                 when (result) {
                     is Resource.Error -> {
                         importWalletState = importWalletState.copy(
