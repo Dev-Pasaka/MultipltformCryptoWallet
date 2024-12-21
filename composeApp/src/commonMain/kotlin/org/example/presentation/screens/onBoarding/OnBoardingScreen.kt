@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,7 +28,6 @@ import kotlinx.coroutines.launch
 import org.example.domain.model.WalletSecrete
 import org.example.presentation.screens.onBoarding.components.CreateWalletBottomSheetContent
 import org.example.presentation.screens.onBoarding.components.ImportWalletBottomSheet
-import org.example.presentation.screens.onBoarding.components.OnBoardingRow
 import org.example.presentation.screens.onBoarding.components.OnBoardingScreenUpperSection
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +57,7 @@ fun OnBoardingScreen(
                     CreateWalletBottomSheetContent(
                         isWalletCreating = viewModel.createWalletState.isLoading,
                         walletSecrete = WalletSecrete(
-                            recoverCode = viewModel.createWalletState.recoverCode ?: "",
+                            recoveryCode = viewModel.createWalletState.recoverCode ?: "",
                         ),
                         onDismiss = {
                             scope.launch {
@@ -73,7 +71,7 @@ fun OnBoardingScreen(
                     ImportWalletBottomSheet(
                         isWalletImporting = false,
                         walletSecrete = WalletSecrete(
-                            recoverCode =  viewModel.importWalletState.recoverCode ?: "",
+                            recoveryCode =  viewModel.importWalletState.recoverCode ?: "",
                         ),
                         onDismiss = {
                             scope.launch {

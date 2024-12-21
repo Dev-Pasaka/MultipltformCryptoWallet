@@ -15,7 +15,7 @@ data class ImportWalletRes(
         println("secrets: $secrets")
         return WalletSecrete(
             id = secrets.id,
-            recoverCode = secrets.recoverCode
+            recoveryCode = secrets.recoverCode
         )
     }
 }
