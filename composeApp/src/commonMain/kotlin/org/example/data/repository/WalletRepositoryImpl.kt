@@ -44,7 +44,7 @@ class WalletRepositoryImpl(
     }
 
     override suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes  = withContext(Dispatchers.IO){
-        val result = api.client.get("${api.baseUrl}/wallet/balance?id=$walletId").body<GetWalletBalanceRes>()
+        val result = api.client.get("${api.baseUrl}/wallet/balance?walletId=$walletId").body<GetWalletBalanceRes>()
         println("result: $result")
         return@withContext result
 

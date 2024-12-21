@@ -21,7 +21,7 @@ import org.example.presentation.screens.splashScreen.SplashScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    startDestination: Screen = Screen.OnBoarding
+    startDestination: Screen = Screen.DashBoard
 ){
     NavHost(
         navController = navController,

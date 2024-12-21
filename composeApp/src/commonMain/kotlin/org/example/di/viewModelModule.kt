@@ -10,6 +10,6 @@ import org.koin.dsl.module
 val viewModelsModule = module {
     single{SplashScreenViewModel()}
     single{AuthScreenViewModel()}
-    single{OnBoardingScreenViewModel(get())}
+    single{OnBoardingScreenViewModel(get(), get())}
     single{DashboardScreenViewModel(get())}
 }
