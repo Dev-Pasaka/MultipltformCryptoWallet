@@ -1,6 +1,7 @@
 package org.example.data.repository
 
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -11,6 +12,8 @@ import org.example.data.remote.KtorClient
 import org.example.data.remote.dto.request.CreateWalletReq
 import org.example.data.remote.dto.request.ImportWalletReq
 import org.example.data.remote.dto.response.createWallet.CreateWalletRes
+import org.example.data.remote.dto.response.getWallet.GetWalletRes
+import org.example.data.remote.dto.response.getWalletBalance.GetWalletBalanceRes
 import org.example.data.remote.dto.response.importWallet.ImportWalletRes
 import org.example.domain.repository.WalletRepository
 
@@ -32,5 +35,18 @@ class WalletRepositoryImpl(
                 setBody(body)
             }.body()
         }
+    }
+
+    override suspend fun getWallet(id: String): GetWalletRes = withContext(Dispatchers.IO) {
+        val result = api.client.get("${api.baseUrl}/wallet?id=$id").body<GetWalletRes>()
+        println("result: $result")
+        return@withContext result
+    }
+
+    override suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes  = withContext(Dispatchers.IO){
+        val result = api.client.get("${api.baseUrl}/wallet/balance?id=$walletId").body<GetWalletBalanceRes>()
+        println("result: $result")
+        return@withContext result
+
     }
 }

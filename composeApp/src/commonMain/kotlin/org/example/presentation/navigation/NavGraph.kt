@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.example.presentation.screens.AuthScreen.AuthScreen
+import org.example.presentation.screens.dashboardScreen.DashBoardScreen
 import org.example.presentation.screens.onBoarding.OnBoardingScreen
 import org.example.presentation.screens.splashScreen.SplashScreen
 
@@ -43,7 +44,7 @@ fun NavGraph(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ){
-                Text(text = "Dashboard")
+                DashBoardScreen()
             }
         }
         composable<Screen.AuthScreen> {
