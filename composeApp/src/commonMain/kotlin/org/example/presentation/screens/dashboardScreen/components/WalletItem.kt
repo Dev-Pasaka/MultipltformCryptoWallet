@@ -51,7 +51,9 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun WalletItem(
     wallet: Wallet,
-    onNavigateToExplorer: (String) -> Unit
+    onNavigateToExplorer: (String) -> Unit,
+    onRequest: (Pair<String, String>) -> Unit,
+    onSend: () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     val loader = rememberPainterLoader()
@@ -63,8 +65,7 @@ fun WalletItem(
 
     val horizontalBrush = Brush.horizontalGradient(
         colors = listOf(
-            dominantColorState.color,
-            MaterialTheme.colorScheme.primaryContainer
+            dominantColorState.color, MaterialTheme.colorScheme.primaryContainer
         )
     )
 
@@ -73,16 +74,13 @@ fun WalletItem(
     Column() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clip(shape = RoundedCornerShape(16.dp))
-                .background(brush = horizontalBrush)
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                .clip(shape = RoundedCornerShape(16.dp)).background(brush = horizontalBrush)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-                    .padding(top = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -92,8 +90,7 @@ fun WalletItem(
                         painter = painterResource(wallet.icon),
                         contentDescription = wallet.blockchain,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(70.dp)
-                            .padding(start = 8.dp)
+                        modifier = Modifier.size(70.dp).padding(start = 8.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
@@ -122,9 +119,7 @@ fun WalletItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 8.dp, bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(end = 8.dp, bottom = 8.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -138,8 +133,11 @@ fun WalletItem(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier.size(32.dp)
+                        onClick = {
+                            clipboardManager.setText(buildAnnotatedString {
+                                append(wallet.address)
+                            })
+                        }, modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.copy_icon),
@@ -149,16 +147,13 @@ fun WalletItem(
                         )
                     }
                 }
-                TextButton(
-                    colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color.Transparent,
-                    ),
-                    onClick = {
-                        onNavigateToExplorer(
-                            wallet.explorerUrl ?: "https://sepolia.etherscan.io/address/"
-                        )
-                    }
-                ) {
+                TextButton(colors = ButtonDefaults.textButtonColors(
+                    backgroundColor = Color.Transparent,
+                ), onClick = {
+                    onNavigateToExplorer(
+                        wallet.explorerUrl ?: "https://sepolia.etherscan.io/address/"
+                    )
+                }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start,
@@ -189,9 +184,7 @@ fun WalletItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             Surface(
-                onClick = { /*TODO*/ },
-                shape = CircleShape,
-                color = Color.Transparent
+                onClick = onSend, shape = CircleShape, color = Color.Transparent
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -213,18 +206,14 @@ fun WalletItem(
                 }
             }
 
-
-
             Surface(
                 onClick = {
-                    clipboardManager.setText(
-                        annotatedString = buildAnnotatedString {
-                            append(text = wallet.address)
-                        }
+                    onRequest(
+                        Pair(
+                            wallet.blockchain, wallet.address
+                        )
                     )
-                },
-                shape = CircleShape,
-                color = Color.Transparent
+                }, shape = CircleShape, color = Color.Transparent
 
             ) {
                 Column(
@@ -234,7 +223,7 @@ fun WalletItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Share,
-                        contentDescription = "Ethereum",
+                        contentDescription = "Request",
                         tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.size(24.dp)
 

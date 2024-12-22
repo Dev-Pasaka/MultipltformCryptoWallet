@@ -12,6 +12,7 @@ androidx-lifecycle = "2.8.3"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.0"
+composeWebview = "0.33.2"
 junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
@@ -40,8 +41,7 @@ datastore = "1.1.1"
 kmp-uuid = "0.8.4"
 kotlinx-datetime = "0.6.0"
 web-view = "1.9.40"
-
-
+qr-kit = "3.0.6"
 #Koin
 koin = "4.0.0"
 koinComposeMultiplatform = "4.0.0"
@@ -71,6 +71,7 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
 web-view = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "web-view"}
+
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -87,6 +88,7 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor-version" }
 kmp-uuid  = { module  = "com.benasher44:uuid", version.ref = "kmp-uuid"}
+qr-kit = { module = "network.chaintech:qr-kit", version.ref = "qr-kit"}
 #Ktor Server
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor-version" }

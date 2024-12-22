@@ -25,7 +25,9 @@ import org.example.domain.model.Wallet
 @Composable
 fun DashboardScreenMiddleSection(
      wallets: List<Wallet>,
-     onNavigateToExplorer: (String) -> Unit
+     onNavigateToExplorer: (String) -> Unit,
+     onRequest: (Pair<String, String>) -> Unit,
+     onSend: () -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -46,7 +48,9 @@ fun DashboardScreenMiddleSection(
             val item = wallets[index]
             WalletItem(
                 wallet = item,
-                onNavigateToExplorer = onNavigateToExplorer
+                onNavigateToExplorer = onNavigateToExplorer,
+                onRequest = onRequest,
+                onSend = onSend
             )
 
         }

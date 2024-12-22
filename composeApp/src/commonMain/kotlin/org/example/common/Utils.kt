@@ -1,7 +1,15 @@
 package org.example.common
 
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.benasher44.uuid.uuid4
 import kotlinx.datetime.*
+
+data class MonthDay(val month: Int, val day: Int)
 
 
 fun generateUUID(): String {
@@ -43,5 +51,27 @@ fun getCurrentSalutation(): String {
     }
 }
 
-data class MonthDay(val month: Int, val day: Int)
+fun painterWithBackground(
+    basePainter: Painter,
+    backgroundColor: Color,
+    cornerRadius: Dp = 0.dp
+): Painter {
+    return object : Painter() {
+        override val intrinsicSize = basePainter.intrinsicSize
+
+        override fun DrawScope.onDraw() {
+            // Draw the background
+            drawRoundRect(
+                color = backgroundColor,
+                size = size,
+                cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx())
+            )
+            // Draw the original painter
+            with(basePainter) {
+                draw(size = size)
+            }
+        }
+    }
+}
+
 

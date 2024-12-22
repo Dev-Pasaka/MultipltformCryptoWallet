@@ -8,6 +8,7 @@ class GetSessionStatusUseCase(
 ) {
     suspend operator fun invoke(): Boolean {
         val session = keyValueStorage.getString(Constants.WALLET_ID)
+        println("Session: $session")
         return session != null
     }
 

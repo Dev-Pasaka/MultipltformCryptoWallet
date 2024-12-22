@@ -187,24 +187,9 @@ class WalletRepositoryImpl(
                 )
             }
 
-            val newWalletId = UUID.randomUUID().toString()
-            val newRecoveryCode = UUID.randomUUID().toString()
+            val newWalletId = existingWallets.firstOrNull()?.id ?: ""
+            val newRecoveryCode =existingWallets.firstOrNull()?.recoveryCode ?: ""
 
-            val updateResult = walletCollection.updateMany(
-                Filters.eq(Wallet::recoveryCode.name, recoverCode),
-                Updates.combine(
-                    Updates.set(Wallet::id.name, newWalletId),
-                    Updates.set(Wallet::recoveryCode.name, newRecoveryCode)
-                )
-            ).wasAcknowledged()
-
-            if (!updateResult) {
-                return@withContext RestoreWalletRes(
-                    httpStatusCode = HttpStatusCode.InternalServerError.value,
-                    status = false,
-                    message = "Failed to restore wallet"
-                )
-            }
 
             val restoredWallets =
                 walletCollection.find(Filters.eq(Wallet::id.name, newWalletId)).toList()
