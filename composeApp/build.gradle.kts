@@ -13,6 +13,18 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+
+compose.desktop {
+    application {
+        // all your other configuration, etc
+
+        jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+        jvmArgs("--add-opens", "java.desktop/java.awt.peer=ALL-UNNAMED")
+    }
+}
+
+
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -20,11 +32,12 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
 
     sourceSets {
         val desktopMain by getting
+
         
         androidMain.dependencies {
             implementation(compose.preview)
@@ -58,10 +71,16 @@ kotlin {
             implementation(libs.ktor.client.serialization.kotlinx.json)
             implementation(libs.ktor.client.auth)
             implementation(libs.kmp.uuid)
+            implementation(libs.kotlinx.datetime)
+            api(libs.web.view)
+            implementation(libs.qr.kit)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation("dev.datlag:kcef:$version")
+
         }
     }
 }
@@ -108,3 +127,6 @@ compose.desktop {
         }
     }
 }
+
+
+
