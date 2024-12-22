@@ -10,6 +10,7 @@ data class Wallet(
     val state: String,
     val icon: DrawableResource,
     val walletBalance: WalletBalance? = null,
+    val explorerUrl: String? = null,
     val createDate: String,
     val updateDate: String
 )

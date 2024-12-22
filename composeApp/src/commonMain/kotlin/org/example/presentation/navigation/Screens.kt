@@ -14,3 +14,8 @@ sealed class Screen() {
     object OnBoarding : Screen()
 
 }
+
+@Serializable
+data class Explorer(
+    val url: String
+): Screen()

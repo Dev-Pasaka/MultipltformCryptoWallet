@@ -58,6 +58,8 @@ kotlin {
             implementation(libs.ktor.client.serialization.kotlinx.json)
             implementation(libs.ktor.client.auth)
             implementation(libs.kmp.uuid)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.web.view)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

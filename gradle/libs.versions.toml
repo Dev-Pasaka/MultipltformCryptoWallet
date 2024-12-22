@@ -38,7 +38,8 @@ materialKolor = "2.0.0"
 kmpalette = "3.1.0"
 datastore = "1.1.1"
 kmp-uuid = "0.8.4"
-
+kotlinx-datetime = "0.6.0"
+web-view = "1.9.40"
 
 
 #Koin
@@ -68,8 +69,8 @@ materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "ma
 kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-
-
+kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
+web-view = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "web-view"}
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }

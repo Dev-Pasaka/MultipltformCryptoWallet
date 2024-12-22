@@ -29,6 +29,12 @@ data class GetWalletRes(
                     "MATIC-AMOY" -> Res.drawable.matic_icon
                     "SOL-DEVNET" -> Res.drawable.sol_icon
                     else -> Res.drawable.ethereum
+                },
+                explorerUrl = when(it.blockchain){
+                    "ETH-SEPOLIA" -> "https://sepolia.etherscan.io/address/${it.address}"
+                    "MATIC-AMOY" -> "https://polygonscan.com/address/${it.address}"
+                    "SOL-DEVNET" -> "https://explorer.solana.com/address/${it.address}"
+                    else -> null
                 }
             )
         }
