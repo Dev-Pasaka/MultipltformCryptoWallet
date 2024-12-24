@@ -2,6 +2,7 @@ package org.example.di
 
 
 import org.example.domain.usecases.requestLink.CreateRequestLinkUseCase
+import org.example.domain.usecases.requestLink.GenerateQrCodeUseCase
 import org.example.domain.usecases.requestLink.GetRequestLinkUseCase
 import org.example.domain.usecases.transaction.CreateTransactionUseCase
 import org.example.domain.usecases.transaction.TransactionHistoryUseCase
@@ -30,5 +31,6 @@ val useCaseModule = module {
     single { TransactionHistoryUseCase(get(), get()) }
     single { CreateRequestLinkUseCase(get(), get()) }
     single { GetRequestLinkUseCase(get(), get()) }
+    single { GenerateQrCodeUseCase() }
 
 }

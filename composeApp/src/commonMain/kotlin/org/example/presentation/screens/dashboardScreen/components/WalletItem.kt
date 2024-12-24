@@ -53,6 +53,7 @@ fun WalletItem(
     wallet: Wallet,
     onNavigateToExplorer: (String) -> Unit,
     onRequest: (Pair<String, String>) -> Unit,
+    onSelectWalletId: (String) -> Unit,
     onSend: () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
@@ -213,6 +214,7 @@ fun WalletItem(
                             wallet.blockchain, wallet.address
                         )
                     )
+                    onSelectWalletId(wallet.individualWalletId)
                 }, shape = CircleShape, color = Color.Transparent
 
             ) {
