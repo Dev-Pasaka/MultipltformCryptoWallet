@@ -2,12 +2,14 @@ package org.example.di
 
 
 import org.example.data.repository.CircleRepositoryImpl
+import org.example.data.repository.RequestLinkRepositoryImpl
 import org.example.data.repository.TransactionRepositoryImpl
 import org.example.data.repository.UserRepositoryImpl
 import org.example.data.repository.WalletRepositoryImpl
 import org.example.domain.repository.CircleRepository
 import org.example.domain.repository.EncryptionRepository
 import org.example.domain.repository.EncryptionRepositoryImpl
+import org.example.domain.repository.RequestLinkRepository
 import org.example.domain.repository.TransactionRepository
 import org.example.domain.repository.UserRepository
 import org.example.domain.repository.WalletRepository
@@ -29,5 +31,7 @@ val repositoryModule = module {
     single<TransactionRepository>{
         TransactionRepositoryImpl(get(), get(), get())
     }
-
+    single<RequestLinkRepository>{
+        RequestLinkRepositoryImpl(get())
+    }
 }
