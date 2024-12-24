@@ -1,5 +1,7 @@
 package org.example.di
 
+import org.example.domain.usecase.requestLink.CreateRequestLinkUseCase
+import org.example.domain.usecase.requestLink.GetRequestLinkDataUseCase
 import org.example.domain.usecase.user.GetSessionStatusUseCase
 import org.example.domain.usecase.wallet.CreateWalletUseCase
 import org.example.domain.usecase.wallet.GetWalletUseCase
@@ -11,4 +13,6 @@ val useCaseModule = module{
     single{ImportWalletUseCase(get(), get())}
     single{GetWalletUseCase(get(), get())}
     single{GetSessionStatusUseCase(get())}
+    single{ CreateRequestLinkUseCase(get())}
+    single{ GetRequestLinkDataUseCase(get())}
 }

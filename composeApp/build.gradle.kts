@@ -74,7 +74,6 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             api(libs.web.view)
             implementation(libs.qr.kit)
-
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

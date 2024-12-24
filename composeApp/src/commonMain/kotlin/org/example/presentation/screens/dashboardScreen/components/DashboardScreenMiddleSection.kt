@@ -27,6 +27,7 @@ fun DashboardScreenMiddleSection(
      wallets: List<Wallet>,
      onNavigateToExplorer: (String) -> Unit,
      onRequest: (Pair<String, String>) -> Unit,
+     onSelectWalletId: (String) -> Unit,
      onSend: () -> Unit
 ) {
     val pagerState = rememberPagerState(
@@ -50,7 +51,8 @@ fun DashboardScreenMiddleSection(
                 wallet = item,
                 onNavigateToExplorer = onNavigateToExplorer,
                 onRequest = onRequest,
-                onSend = onSend
+                onSend = onSend,
+                onSelectWalletId = onSelectWalletId
             )
 
         }

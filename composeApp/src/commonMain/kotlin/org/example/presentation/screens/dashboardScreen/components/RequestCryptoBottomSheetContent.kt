@@ -1,5 +1,6 @@
 package org.example.presentation.screens.dashboardScreen.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
@@ -58,14 +60,20 @@ import qrgenerator.qrkitpainter.rememberQrKitPainter
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalClipboardManager
+import cryptowallet.composeapp.generated.resources.copy_icon
 import cryptowallet.composeapp.generated.resources.paste
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import org.example.data.remote.dto.request.CreateRequestLinkReq
+import org.example.presentation.screens.dashboardScreen.CreateRequestLinkState
 
 @Composable
 fun RequestCryptoBottomSheetContent(
     walletContent: Pair<String, String>,
+    walletId: String,
+    createRequestLinkState: CreateRequestLinkState,
+    onCreateRequestLink: (CreateRequestLinkReq) -> Unit,
     onCancel: () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
@@ -73,7 +81,6 @@ fun RequestCryptoBottomSheetContent(
     var amount by remember { mutableStateOf("") }
 
     var qrData by remember { mutableStateOf("") }
-
     val centerLogo = when (walletContent.first) {
         "ETH-SEPOLIA" -> painterWithBackground(
             basePainter = painterResource(Res.drawable.eth_icon),
@@ -102,7 +109,7 @@ fun RequestCryptoBottomSheetContent(
 
 
     val qrCodeColor = MaterialTheme.colorScheme.onPrimaryContainer
-    val painter = rememberQrKitPainter(qrData) {
+    val painter = rememberQrKitPainter(createRequestLinkState.link) {
         shapes = QrKitShapes(
             ballShape = getSelectedQrBall(QrBallType.SquareQrBall()),
             darkPixelShape = getSelectedPixel(QrPixelType.CirclePixel()),
@@ -245,17 +252,19 @@ fun RequestCryptoBottomSheetContent(
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = 8.dp)
         ) {
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .height(200.dp)
-            )
+            AnimatedVisibility(createRequestLinkState.isSuccessful){
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(200.dp)
+                )
+            }
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 16.dp)
 
             ) {
@@ -269,35 +278,88 @@ fun RequestCryptoBottomSheetContent(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
+
                 Button(
-                    onClick = {},
+                    onClick = {
+                        onCreateRequestLink(
+                            CreateRequestLinkReq(
+                                address = address,
+                                amount = amount.toDoubleOrNull() ?: 0.0,
+                                blockchain = walletContent.first,
+                                walletId = walletId
+                            )
+                        )
+                    },
+                    enabled = !createRequestLinkState.isLoading,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ),
                     shape = RoundedCornerShape(32.dp),
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    ) {
-                        Text(
-                            text = "Request",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                    if (createRequestLinkState.isLoading) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(8.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = "Ethereum",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(32.dp)
-                        )
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        ) {
+                            Text(
+                                text = "Create",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "Ethereum",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
                     }
                 }
+
+                AnimatedVisibility(createRequestLinkState.isSuccessful) {
+                    IconButton(
+                        onClick = {
+                            clipboardManager.setText(
+                                androidx.compose.ui.text.AnnotatedString(
+                                    createRequestLinkState.link
+                                )
+                            )
+                        },
+                        
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        ) {
+                            Text(
+                                text = "Copy link",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                painter = painterResource(Res.drawable.copy_icon),
+                                contentDescription = "Ethereum",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                    }
+                }
+                
             }
         }
     }

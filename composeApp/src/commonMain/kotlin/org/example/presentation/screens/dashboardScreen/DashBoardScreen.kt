@@ -45,6 +45,9 @@ fun DashBoardScreen(
     var walletContent by remember{
         mutableStateOf(Pair("", ""))
     }
+    var walletId by remember {
+        mutableStateOf("")
+    }
     val scope = rememberCoroutineScope()
     var selectedBottomSheetContent by mutableStateOf("")
 
@@ -64,7 +67,15 @@ fun DashBoardScreen(
                             bottomSheetScaffoldState.bottomSheetState.hide()
                         }
                         walletContent = Pair("", "")
-                    }
+
+                    },
+                    onCreateRequestLink = {
+                        viewModel.createRequestLink(it)
+                    },
+                    createRequestLinkState = viewModel.createRequestLinkState,
+                    walletId = walletId
+
+
                 )
             }
         }
@@ -86,6 +97,7 @@ fun DashBoardScreen(
                         }
                         walletContent = content
                     },
+                    onSelectWalletId = {walletId = it},
                     onSend = {
                         scope.launch {
                             bottomSheetScaffoldState.bottomSheetState.expand()

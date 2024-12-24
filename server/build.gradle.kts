@@ -94,4 +94,7 @@ dependencies {
     implementation(libs.kotlinx.rpc.serialization)
     implementation(libs.ktor.cors)
     implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.html.template)
+    implementation(libs.ktor.qr.code.gen)
+
 }

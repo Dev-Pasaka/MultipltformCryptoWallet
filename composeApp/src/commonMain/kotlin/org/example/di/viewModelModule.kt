@@ -11,5 +11,5 @@ val viewModelsModule = module {
     single{SplashScreenViewModel(get())}
     single{AuthScreenViewModel()}
     single{OnBoardingScreenViewModel(get(), get())}
-    single{DashboardScreenViewModel(get())}
+    single{DashboardScreenViewModel(get(), get(), get())}
 }
