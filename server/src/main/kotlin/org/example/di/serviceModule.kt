@@ -1,5 +1,6 @@
 package org.example.di
 
+import org.example.presentation.service.RequestLinkService
 import org.example.presentation.service.TransactionService
 import org.example.presentation.service.UserService
 import org.example.presentation.service.WalletService
@@ -9,4 +10,6 @@ val serviceModule = module {
     single { WalletService(get(), get(), get(), get(), get()) }
     single { UserService(get(), get(), get()) }
     single { TransactionService(get(), get(), get()) }
+    single { RequestLinkService(get(), get()) }
+
 }

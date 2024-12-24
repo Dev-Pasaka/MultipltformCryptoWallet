@@ -1,6 +1,8 @@
 package org.example.di
 
 
+import org.example.domain.usecases.requestLink.CreateRequestLinkUseCase
+import org.example.domain.usecases.requestLink.GetRequestLinkUseCase
 import org.example.domain.usecases.transaction.CreateTransactionUseCase
 import org.example.domain.usecases.transaction.TransactionHistoryUseCase
 import org.example.domain.usecases.transaction.TransactionProcessor
@@ -26,5 +28,7 @@ val useCaseModule = module {
     single { CreateTransactionUseCase(get(), get(), get()) }
     single { TransactionProcessor(get(), get(), get(), get()) }
     single { TransactionHistoryUseCase(get(), get()) }
+    single { CreateRequestLinkUseCase(get(), get()) }
+    single { GetRequestLinkUseCase(get(), get()) }
 
 }
