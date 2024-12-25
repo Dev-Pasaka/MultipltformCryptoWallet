@@ -12,6 +12,8 @@ sealed class Screen() {
     object AuthScreen: Screen()
     @Serializable
     object OnBoarding : Screen()
+    @Serializable
+    object QRCodeScanner : Screen()
 
 }
 

@@ -6,10 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.example.presentation.screens.AuthScreen.AuthScreen
+import org.example.presentation.screens.QrCodeScannerScreen
 import org.example.presentation.screens.dashboardScreen.DashBoardScreen
 import org.example.presentation.screens.explorer.ExplorerScreen
 import org.example.presentation.screens.onBoarding.OnBoardingScreen
 import org.example.presentation.screens.splashScreen.SplashScreen
+import qrscanner.QrCodeScanner
 
 
 @Composable
@@ -35,6 +37,9 @@ fun NavGraph(
             DashBoardScreen(
                 onNavigateToExplorer = { url ->
                     navController.navigate(Explorer(url))
+                },
+                onOpenQRCodeScreen = {
+                    navController.navigate(Screen.QRCodeScanner)
                 }
             )
         }
@@ -56,6 +61,13 @@ fun NavGraph(
             val explorer: Explorer = backStackEntry.toRoute()
             ExplorerScreen(
                 url = explorer.url,
+                onNavigateBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Screen.QRCodeScanner> {
+            QrCodeScannerScreen(
                 onNavigateBack = {
                     navController.navigateUp()
                 }
