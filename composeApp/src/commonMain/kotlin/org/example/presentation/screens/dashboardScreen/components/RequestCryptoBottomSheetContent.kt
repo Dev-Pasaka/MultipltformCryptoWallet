@@ -195,18 +195,40 @@ fun RequestCryptoBottomSheetContent(
 
                 ),
                 trailingIcon = {
-                    IconButton(
-                        onClick = {
-                            val text = clipboardManager.getText()
-                            address = text?.text ?: ""
+                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+
+                        verticalAlignment = Alignment.CenterVertically,
+
+                        ) {
+                        AnimatedVisibility(address.isEmpty()) {
+                            IconButton(
+                                onClick = {
+                                    val text = clipboardManager.getText()
+                                    address = text?.text ?: ""
+                                }
+                            ) {
+                                Icon(
+                                    painter = painterResource(Res.drawable.paste),
+                                    contentDescription = "Paste address",
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.paste),
-                            contentDescription = "Create wallet",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(32.dp)
-                        )
+                        AnimatedVisibility(address.isNotEmpty()) {
+                            IconButton(
+                                onClick = {
+                                    address = ""
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Clear",
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

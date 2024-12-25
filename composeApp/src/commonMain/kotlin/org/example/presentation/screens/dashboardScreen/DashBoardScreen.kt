@@ -25,6 +25,7 @@ import org.example.domain.model.WalletSecrete
 import org.example.presentation.screens.dashboardScreen.components.DashboardScreenMiddleSection
 import org.example.presentation.screens.dashboardScreen.components.DashboardScreenUpperSection
 import org.example.presentation.screens.dashboardScreen.components.RequestCryptoBottomSheetContent
+import org.example.presentation.screens.dashboardScreen.components.TransferCryptoBottomSheetContent
 import org.example.presentation.screens.dashboardScreen.components.WalletItem
 import org.example.presentation.screens.onBoarding.components.CreateWalletBottomSheetContent
 import org.example.presentation.screens.onBoarding.components.ImportWalletBottomSheet
@@ -33,7 +34,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashBoardScreen(
-    onNavigateToExplorer: (String) -> Unit
+    onNavigateToExplorer: (String) -> Unit,
+    onOpenQRCodeScreen: () -> Unit
 ) {
     val viewModel: DashboardScreenViewModel = koinViewModel()
 
@@ -76,6 +78,14 @@ fun DashBoardScreen(
                     walletId = walletId
 
 
+                )
+                "Send" -> TransferCryptoBottomSheetContent(
+                    onOpenQrScanner = onOpenQRCodeScreen,
+                    onCancel = {
+                        scope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.hide()
+                        }
+                    }
                 )
             }
         }
