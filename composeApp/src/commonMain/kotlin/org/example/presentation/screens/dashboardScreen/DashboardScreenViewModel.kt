@@ -9,6 +9,7 @@ import org.example.domain.usecase.wallet.GetWalletUseCase
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import org.example.data.remote.dto.request.CreateRequestLinkReq
+import org.example.data.remote.dto.request.TransferCryptoReq
 import org.example.domain.usecase.requestLink.CreateRequestLinkUseCase
 import org.example.domain.usecase.requestLink.GetRequestLinkDataUseCase
 import org.example.presentation.screens.dashboardScreen.WalletState
@@ -26,13 +27,16 @@ class DashboardScreenViewModel(
     var getRequestLinkDataState by mutableStateOf(GetRequestLinkDataState())
         private set
 
+
     fun getWallet(){
         viewModelScope.launch{
             getWalletUseCase().collect{result ->
                 when(result){
                     is Resource.Error -> {
                         walletState = walletState.copy(
-                            error = result.message.toString()
+                            error = result.message.toString(),
+                            isSuccessful = false,
+                            isLoading = false
                         )
                     }
                     is Resource.Loading -> {
@@ -42,6 +46,7 @@ class DashboardScreenViewModel(
                     }
                     is Resource.Success -> {
                         walletState = walletState.copy(
+                            isLoading = false,
                             isSuccessful = true,
                             wallets = result.data ?: emptyList()
                         )

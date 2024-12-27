@@ -5,12 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +33,9 @@ import org.example.common.getCurrentSalutation
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun DashboardScreenUpperSection() {
+fun DashboardScreenUpperSection(
+    onRefresh :() -> Unit
+) {
 
     val loader = rememberPainterLoader()
     val dominantColorState = rememberDominantColorState(loader = loader)
@@ -62,11 +70,29 @@ fun DashboardScreenUpperSection() {
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleLarge
                 )
-                Text(
-                    text = getCurrentSalutation(),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    Text(
+                        text = getCurrentSalutation(),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(
+                        onClick = onRefresh,
+                        modifier = Modifier
+                            .clip(shape = CircleShape)
+                            .background(color = MaterialTheme.colorScheme.primaryContainer)
+                    ){
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            contentDescription = "Refresh"
+                        )
+                    }
+                }
             }
             Column(
                 verticalArrangement = Arrangement.Center,
