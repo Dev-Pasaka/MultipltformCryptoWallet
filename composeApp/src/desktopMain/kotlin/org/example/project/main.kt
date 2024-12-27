@@ -23,6 +23,7 @@ import kotlin.math.max
 
 fun main() = runBlocking {
     initKoin()
+
     application {
         Window(
             resizable = true,

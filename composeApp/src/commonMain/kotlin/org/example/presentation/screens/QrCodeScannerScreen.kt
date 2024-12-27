@@ -18,22 +18,43 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import qrscanner.CameraLens
 import qrscanner.QrScanner
 
 @Composable
 fun QrCodeScannerScreen(
-    onNavigateBack: () -> Unit
+    tokenId: String,
+    blockchain: String,
+    onNavigateBack: () -> Unit,
+    onNavigateToTransfer: (String, Double, String, String) -> Unit
 ) {
-    var qrCodeURL by remember { mutableStateOf("") }
+    var qrCodeData by remember { mutableStateOf("") }
     var flashlightOn by remember { mutableStateOf(false) }
     var openImagePicker by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    Box(modifier = Modifier.fillMaxSize()
-        .navigationBarsPadding()
-        .statusBarsPadding()
+    LaunchedEffect(qrCodeData){
+        if (qrCodeData.isNotEmpty()){
+            val obj  = try {
+                Json.decodeFromString<Map<String, String>>(qrCodeData)
+            }catch (e: Exception){
+                null
+            }
+            println(obj)
+            val address = obj?.get("address")
+            val amount = obj?.get("amount")?.toDoubleOrNull()
+            if (address != null && amount != null){
+                onNavigateToTransfer(address, amount, blockchain, tokenId)
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .navigationBarsPadding()
+            .statusBarsPadding()
     ) {
         Box(
             modifier = Modifier
@@ -57,9 +78,10 @@ fun QrCodeScannerScreen(
                             .fillMaxSize(), // Ensure the scanner respects rounded corners
                         flashlightOn = flashlightOn,
                         openImagePicker = openImagePicker,
-                        onCompletion = { qrCodeURL = it
-                                       println(it)
-                                       },
+                        onCompletion = {
+                            qrCodeData = it
+
+                        },
                         imagePickerHandler = { openImagePicker = it },
                         cameraLens = CameraLens.Back,
                         onFailure = { error ->
@@ -75,10 +97,10 @@ fun QrCodeScannerScreen(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
                     .align(Alignment.TopCenter)
-            ){
+            ) {
                 IconButton(
                     onClick = onNavigateBack
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
@@ -91,10 +113,10 @@ fun QrCodeScannerScreen(
     }
 
     // Optional Snackbar
-    if (qrCodeURL.isNotEmpty()) {
+    if (qrCodeData.isNotEmpty()) {
         // Show qrCodeURL in a Snackbar or handle it as necessary
-        LaunchedEffect(qrCodeURL) {
-            snackbarHostState.showSnackbar("Scanned URL: $qrCodeURL")
+        LaunchedEffect(qrCodeData) {
+            snackbarHostState.showSnackbar("Scanned URL: $qrCodeData")
         }
     }
 

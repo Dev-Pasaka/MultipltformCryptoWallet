@@ -54,7 +54,7 @@ fun WalletItem(
     onNavigateToExplorer: (String) -> Unit,
     onRequest: (Pair<String, String>) -> Unit,
     onSelectWalletId: (String) -> Unit,
-    onSend: () -> Unit
+    onSend: (String, String) -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     val loader = rememberPainterLoader()
@@ -185,7 +185,15 @@ fun WalletItem(
             modifier = Modifier.fillMaxWidth()
         ) {
             Surface(
-                onClick = onSend, shape = CircleShape, color = Color.Transparent
+                enabled = wallet.walletBalance?.tokenId?.isNotBlank() == true,
+                onClick = {
+                    onSend(
+                        wallet.blockchain,
+                        wallet.walletBalance?.tokenId ?: ""
+                        )
+                          },
+                shape = CircleShape,
+                color = Color.Transparent
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,

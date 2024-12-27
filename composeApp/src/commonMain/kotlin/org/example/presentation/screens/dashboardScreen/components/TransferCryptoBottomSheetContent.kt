@@ -33,8 +33,11 @@ import cryptowallet.composeapp.generated.resources.qr_code
 
 @Composable
 fun TransferCryptoBottomSheetContent(
+    selectedBlockchain: String,
+    selectedTokenId: String,
     onCancel: () -> Unit,
-    onOpenQrScanner : () -> Unit
+    onOpenQrScanner : () -> Unit,
+    onNavigateToTransfer: (Double,String,String, String) -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     var address by remember {
@@ -147,6 +150,10 @@ fun TransferCryptoBottomSheetContent(
 
             )
         }
-        CustomNumberKeyboard {  }
+        CustomNumberKeyboard(
+            onDone = {
+                onNavigateToTransfer(it.toDoubleOrNull() ?: 0.0, address, selectedBlockchain, selectedTokenId)
+            }
+        )
     }
 }
