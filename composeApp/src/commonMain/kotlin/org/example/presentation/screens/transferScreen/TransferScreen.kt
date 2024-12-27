@@ -1,7 +1,6 @@
 package org.example.presentation.screens.transferScreen
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -12,14 +11,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -49,6 +45,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.drawscope.clipRect
 import kotlinx.coroutines.delay
 import org.example.data.remote.dto.request.TransferCryptoReq
+import org.example.presentation.screens.transferScreen.components.SuccessDialog
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -60,6 +57,29 @@ fun TransferScreen(
     onCancel: () -> Unit
 ) {
     val viewModel: TransferScreenViewModel = koinViewModel()
+
+    var showSuccessDialog by remember { mutableStateOf(false) }
+    var showErrorDialog by remember { mutableStateOf(false) }
+
+    // Dialogs
+    SuccessDialog(isVisible = showSuccessDialog, onClose = {
+        showSuccessDialog = false
+        onCancel()
+    })
+    ErrorDialog(isVisible = showErrorDialog == false, onClose = {
+        showErrorDialog = false
+        onCancel()
+    })
+
+    LaunchedEffect(viewModel.transferState.isSuccess){
+        if (viewModel.transferState.isSuccess){
+            showSuccessDialog = true
+        }else{
+            showErrorDialog = true
+        }
+
+    }
+
     Surface(
         color = MaterialTheme.colorScheme.background
     ) {
@@ -199,6 +219,8 @@ fun LongPressButton(
 
     }
 
+
+
     Surface(
         shape = RoundedCornerShape(14.dp),
         modifier = Modifier
@@ -244,5 +266,9 @@ fun LongPressButton(
             )
         }
     }
+
+
+
+
 }
 

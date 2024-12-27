@@ -106,7 +106,11 @@ fun NavGraph(
                 address = data.address,
                 amount = data.amount,
                 onCancel = {
-                    navController.navigateUp()
+                    navController.navigate(Screen.DashBoard){
+                        popUpTo<Screen.DashBoard>{
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

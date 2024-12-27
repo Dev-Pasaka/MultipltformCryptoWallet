@@ -2,11 +2,15 @@ package org.example.presentation.screens.dashboardScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
@@ -15,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cryptowallet.composeapp.generated.resources.Res
@@ -45,11 +50,11 @@ fun DashBoardScreen(
             skipHiddenState = false
         )
     )
-    var walletContent by remember{
+    var walletContent by remember {
         mutableStateOf(Pair("", ""))
     }
-    var selectedBlockchain by remember { mutableStateOf("")}
-    var selectedTokenId by remember { mutableStateOf("")}
+    var selectedBlockchain by remember { mutableStateOf("") }
+    var selectedTokenId by remember { mutableStateOf("") }
     var walletId by remember {
         mutableStateOf("")
     }
@@ -82,10 +87,16 @@ fun DashBoardScreen(
 
 
                 )
+
                 "Send" -> TransferCryptoBottomSheetContent(
                     selectedBlockchain = selectedBlockchain,
                     selectedTokenId = selectedTokenId,
-                    onOpenQrScanner = {onOpenQRCodeScreen(selectedBlockchain, selectedTokenId)},
+                    onOpenQrScanner = {
+                        onOpenQRCodeScreen(
+                            selectedBlockchain,
+                            selectedTokenId
+                        )
+                    },
                     onCancel = {
                         scope.launch {
                             bottomSheetScaffoldState.bottomSheetState.hide()
@@ -103,19 +114,21 @@ fun DashBoardScreen(
             color = MaterialTheme.colorScheme.background
         ) {
             Column {
-                DashboardScreenUpperSection()
+                DashboardScreenUpperSection(
+                    onRefresh = {viewModel.getWallet()}
+                )
                 DashboardScreenMiddleSection(
                     wallets = viewModel.walletState.wallets,
                     onNavigateToExplorer = onNavigateToExplorer,
-                    onRequest = {content->
+                    onRequest = { content ->
                         scope.launch {
                             bottomSheetScaffoldState.bottomSheetState.expand()
                             selectedBottomSheetContent = "Request"
                         }
                         walletContent = content
                     },
-                    onSelectWalletId = {walletId = it},
-                    onSend = {blockchain, tokenId->
+                    onSelectWalletId = { walletId = it },
+                    onSend = { blockchain, tokenId ->
                         scope.launch {
                             bottomSheetScaffoldState.bottomSheetState.expand()
                             selectedBottomSheetContent = "Send"
@@ -127,4 +140,5 @@ fun DashBoardScreen(
             }
         }
     }
+
 }
