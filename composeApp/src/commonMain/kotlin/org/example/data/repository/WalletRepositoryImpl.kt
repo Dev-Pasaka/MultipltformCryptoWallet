@@ -11,10 +11,12 @@ import kotlinx.coroutines.withContext
 import org.example.data.remote.KtorClient
 import org.example.data.remote.dto.request.CreateWalletReq
 import org.example.data.remote.dto.request.ImportWalletReq
+import org.example.data.remote.dto.request.TransferCryptoReq
 import org.example.data.remote.dto.response.createWallet.CreateWalletRes
 import org.example.data.remote.dto.response.getWallet.GetWalletRes
 import org.example.data.remote.dto.response.getWalletBalance.GetWalletBalanceRes
 import org.example.data.remote.dto.response.importWallet.ImportWalletRes
+import org.example.data.remote.dto.response.transferCrypto.TransferCryptoRes
 import org.example.domain.repository.WalletRepository
 
 class WalletRepositoryImpl(
@@ -43,10 +45,21 @@ class WalletRepositoryImpl(
         return@withContext result
     }
 
-    override suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes  = withContext(Dispatchers.IO){
-        val result = api.client.get("${api.baseUrl}/wallet/balance?walletId=$walletId").body<GetWalletBalanceRes>()
-        println("result: $result")
-        return@withContext result
+    override suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes =
+        withContext(Dispatchers.IO) {
+            val result = api.client.get("${api.baseUrl}/wallet/balance?walletId=$walletId")
+                .body<GetWalletBalanceRes>()
+            println("result: $result")
+            return@withContext result
 
+        }
+
+    override suspend fun transferCrypto(body: TransferCryptoReq): TransferCryptoRes = withContext(
+        Dispatchers.IO
+    ) {
+        return@withContext api.client.post("${api.baseUrl}/transaction") {
+            contentType(ContentType.Application.Json)
+            setBody(body)
+        }.body()
     }
 }

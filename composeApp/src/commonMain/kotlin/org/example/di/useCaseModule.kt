@@ -6,6 +6,7 @@ import org.example.domain.usecase.user.GetSessionStatusUseCase
 import org.example.domain.usecase.wallet.CreateWalletUseCase
 import org.example.domain.usecase.wallet.GetWalletUseCase
 import org.example.domain.usecase.wallet.ImportWalletUseCase
+import org.example.domain.usecase.wallet.TransferCryptoUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module{
@@ -15,4 +16,5 @@ val useCaseModule = module{
     single{GetSessionStatusUseCase(get())}
     single{ CreateRequestLinkUseCase(get())}
     single{ GetRequestLinkDataUseCase(get())}
+    single{ TransferCryptoUseCase(get(), get())}
 }

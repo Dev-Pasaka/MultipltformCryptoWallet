@@ -12,12 +12,24 @@ sealed class Screen() {
     object AuthScreen: Screen()
     @Serializable
     object OnBoarding : Screen()
-    @Serializable
-    object QRCodeScanner : Screen()
 
 }
+
+
+
+@Serializable
+data class QRCodeScanner(val blockchain: String, val tokenId : String) : Screen()
 
 @Serializable
 data class Explorer(
     val url: String
 ): Screen()
+
+@Serializable
+data class TransactScreen(
+    val address: String,
+    val blockchain: String,
+    val tokenId: String,
+    val amount: String
+) :Screen()
+

@@ -28,7 +28,7 @@ fun DashboardScreenMiddleSection(
      onNavigateToExplorer: (String) -> Unit,
      onRequest: (Pair<String, String>) -> Unit,
      onSelectWalletId: (String) -> Unit,
-     onSend: () -> Unit
+     onSend: (String, String) -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,

@@ -67,17 +67,7 @@ class TransactionRepositoryImpl(
                         ), null
                     )
 
-            /**
-             * Check if user exists
-             * */
-            val user = userCollection.find(Filters.eq(User::walletId.name, wallet.id)).firstOrNull()
-                ?: return@withContext Pair(
-                    TransferCryptoRes(
-                        httpStatusCode = 400,
-                        status = false,
-                        message = "User not found",
-                    ), null
-                )
+
 
             /**
              * Check if wallet balance exists
@@ -142,7 +132,7 @@ class TransactionRepositoryImpl(
              * Create transaction
              * */
             val transaction = Transaction(
-                senderId = user.id,
+                senderId = "",
                 walletId = wallet.walletId,
                 tokenId = walletBalance.token.id,
                 amounts = listOf(body.amount.toString()),
