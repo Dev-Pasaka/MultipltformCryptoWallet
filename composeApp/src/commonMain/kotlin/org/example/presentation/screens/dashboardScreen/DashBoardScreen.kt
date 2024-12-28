@@ -1,8 +1,13 @@
 package org.example.presentation.screens.dashboardScreen
 
+import DashboardScreenLowerSection
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.BottomSheetScaffold
@@ -14,6 +19,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +27,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.eygraber.compose.placeholder.PlaceholderHighlight
+import com.eygraber.compose.placeholder.fade
+import com.eygraber.compose.placeholder.material.placeholder
 import cryptowallet.composeapp.generated.resources.Res
 import cryptowallet.composeapp.generated.resources.eth_icon
 import kotlinx.coroutines.launch
@@ -60,6 +71,9 @@ fun DashBoardScreen(
     }
     val scope = rememberCoroutineScope()
     var selectedBottomSheetContent by mutableStateOf("")
+
+    val scrollState = rememberLazyListState()
+
 
     BottomSheetScaffold(
         sheetPeekHeight = 0.dp,
@@ -110,14 +124,22 @@ fun DashBoardScreen(
 
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .navigationBarsPadding(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize(),
+            ) {
                 DashboardScreenUpperSection(
-                    onRefresh = {viewModel.getWallet()}
+                    onRefresh = {
+                        viewModel.refresh()
+                    }
                 )
+
                 DashboardScreenMiddleSection(
+                    isWalletLoading = viewModel.walletState.isLoading,
                     wallets = viewModel.walletState.wallets,
                     onNavigateToExplorer = onNavigateToExplorer,
                     onRequest = { content ->
@@ -136,6 +158,12 @@ fun DashBoardScreen(
                             selectedTokenId = tokenId
                         }
                     }
+                )
+
+                DashboardScreenLowerSection(
+                    isTransactionsLoading = viewModel.transactionsState.isLoading,
+                    scrollState = scrollState,
+                    transactions = viewModel.transactionsState.transactions,
                 )
             }
         }

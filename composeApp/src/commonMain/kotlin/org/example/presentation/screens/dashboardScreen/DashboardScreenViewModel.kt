@@ -12,21 +12,32 @@ import org.example.data.remote.dto.request.CreateRequestLinkReq
 import org.example.data.remote.dto.request.TransferCryptoReq
 import org.example.domain.usecase.requestLink.CreateRequestLinkUseCase
 import org.example.domain.usecase.requestLink.GetRequestLinkDataUseCase
+import org.example.domain.usecase.wallet.GetTransactionUseCase
 import org.example.presentation.screens.dashboardScreen.WalletState
 
 class DashboardScreenViewModel(
     private val getWalletUseCase: GetWalletUseCase,
     private val createRequestLinkUseCase: CreateRequestLinkUseCase,
-    private val getRequestLinkDataUseCase: GetRequestLinkDataUseCase
+    private val getTransactionsUseCase: GetTransactionUseCase,
 ): ViewModel() {
 
     var walletState by mutableStateOf(WalletState())
         private set
     var createRequestLinkState by mutableStateOf(CreateRequestLinkState())
         private set
-    var getRequestLinkDataState by mutableStateOf(GetRequestLinkDataState())
+
+    var transactionsState by mutableStateOf(TransactionsState())
         private set
 
+    var isRefreshing by mutableStateOf(false)
+        private set
+
+    fun refresh() {
+        isRefreshing = true
+        getWallet()
+        getTransactions()
+        isRefreshing = false
+    }
 
     fun getWallet(){
         viewModelScope.launch{
@@ -87,37 +98,62 @@ class DashboardScreenViewModel(
             }
         }
     }
-    fun getRequestLinkData(){
-        val shortCode = createRequestLinkState.link.split("/").last()
+
+    fun getTransactions(){
         viewModelScope.launch{
-            getRequestLinkDataUseCase.invoke(shortCode).collect{result ->
-                when(result) {
+            getTransactionsUseCase().collect { result ->
+                when (result) {
                     is Resource.Error -> {
-                        getRequestLinkDataState = getRequestLinkDataState.copy(
+                        transactionsState = transactionsState.copy(
                             isLoading = false,
-                            error = result.message.toString()
+                            error = result.message.toString(),
+                            isSuccessful = false
                         )
+                        println("Error: ${result.message}")
                     }
 
                     is Resource.Loading -> {
-                        getRequestLinkDataState = getRequestLinkDataState.copy(
-                            isLoading = true
+                        transactionsState = transactionsState.copy(
+                            isLoading = true,
+                            isSuccessful = false
                         )
+                        println("Loading")
                     }
 
                     is Resource.Success -> {
-                        getRequestLinkDataState = getRequestLinkDataState.copy(
+                        transactionsState = transactionsState.copy(
                             isLoading = false,
                             isSuccessful = true,
-                            data = result.data
+                            transactions = result.data?.map{transaction->
+                                var transactionData = transaction
+                                walletState.wallets.forEach{wallet->
+                                    transactionData = if (wallet.address == transaction.senderAddress){
+                                        transaction.copy(
+                                            transactionType = "OUT"
+                                        )
+                                    }
+                                    else if (wallet.address == transaction.receiverAddress){
+                                        transaction.copy(
+                                            transactionType = "IN"
+                                        )
+                                    }
+                                    else transaction
+                                }
+                                transactionData
+
+                            } ?: emptyList()
                         )
+                        println("Success: ${result.data}")
                     }
                 }
             }
         }
     }
 
+
+
     init {
         getWallet()
+        getTransactions()
     }
 }

@@ -21,5 +21,6 @@ data class TransactionData(
     val blockchain: String,
     val status: String,
     val timestamp: String,
+    val transactionType: String = ""
 )
 

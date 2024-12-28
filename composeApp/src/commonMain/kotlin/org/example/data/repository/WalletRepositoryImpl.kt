@@ -13,6 +13,7 @@ import org.example.data.remote.dto.request.CreateWalletReq
 import org.example.data.remote.dto.request.ImportWalletReq
 import org.example.data.remote.dto.request.TransferCryptoReq
 import org.example.data.remote.dto.response.createWallet.CreateWalletRes
+import org.example.data.remote.dto.response.getTransactions.GetTransactionsRes
 import org.example.data.remote.dto.response.getWallet.GetWalletRes
 import org.example.data.remote.dto.response.getWalletBalance.GetWalletBalanceRes
 import org.example.data.remote.dto.response.importWallet.ImportWalletRes
@@ -61,5 +62,13 @@ class WalletRepositoryImpl(
             contentType(ContentType.Application.Json)
             setBody(body)
         }.body()
+    }
+
+    override suspend fun getTransactions(walletId: String): GetTransactionsRes = withContext(
+        Dispatchers.IO
+    ) {
+        return@withContext api.client.get("${api.baseUrl}/transaction/history?walletId=$walletId")
+            .body()
+
     }
 }

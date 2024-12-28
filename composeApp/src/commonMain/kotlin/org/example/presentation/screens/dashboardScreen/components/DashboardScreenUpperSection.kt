@@ -81,7 +81,10 @@ fun DashboardScreenUpperSection(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
-                        onClick = onRefresh,
+                        onClick = {
+                            onRefresh()
+                            println("Refresh Clicked")
+                        },
                         modifier = Modifier
                             .clip(shape = CircleShape)
                             .background(color = MaterialTheme.colorScheme.primaryContainer)

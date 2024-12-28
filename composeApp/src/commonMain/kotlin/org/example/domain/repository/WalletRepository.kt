@@ -4,6 +4,7 @@ import org.example.data.remote.dto.request.TransferCryptoReq
 import org.example.data.remote.dto.request.CreateWalletReq
 import org.example.data.remote.dto.request.ImportWalletReq
 import org.example.data.remote.dto.response.createWallet.CreateWalletRes
+import org.example.data.remote.dto.response.getTransactions.GetTransactionsRes
 import org.example.data.remote.dto.response.getWallet.GetWalletRes
 import org.example.data.remote.dto.response.getWalletBalance.GetWalletBalanceRes
 import org.example.data.remote.dto.response.importWallet.ImportWalletRes
@@ -15,6 +16,7 @@ interface WalletRepository {
     suspend fun getWallet(id: String):GetWalletRes
     suspend fun getWalletBalance(walletId: String): GetWalletBalanceRes
     suspend fun transferCrypto(body: TransferCryptoReq): TransferCryptoRes
+    suspend fun getTransactions(walletId: String): GetTransactionsRes
 }
 
 
