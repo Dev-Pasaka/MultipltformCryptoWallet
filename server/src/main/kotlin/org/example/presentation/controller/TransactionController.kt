@@ -8,7 +8,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.util.reflect.typeInfo
 import org.example.presentation.dto.request.TransferCryptoReq
-import org.example.presentation.dto.response.PersonChat
+import org.example.presentation.dto.response.TransactionRes
 import org.example.presentation.dto.response.TransferCryptoRes
 import org.example.presentation.service.TransactionService
 
@@ -29,7 +29,7 @@ fun Route.transactionController(transactionService: TransactionService) {
             )
             val response = transactionService.transactionHistory(walletId)
             call.respond(
-                typeInfo = typeInfo<List<PersonChat>>(),
+                typeInfo = typeInfo<TransactionRes>(),
                 message = response
             )
         }
