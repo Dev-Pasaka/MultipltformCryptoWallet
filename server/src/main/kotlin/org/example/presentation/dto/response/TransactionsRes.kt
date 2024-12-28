@@ -1,26 +1,19 @@
 package org.example.presentation.dto.response
 
+import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TransactionsRes(
-    val httpStatusCode: Int,
-    val status: Boolean,
-    val message: String,
-    val data: List<PersonChat>? = emptyList() // Grouped by individual person
+data class TransactionRes(
+    val httpStatusCode: Int = HttpStatusCode.OK.value,
+    val status: Boolean = false,
+    val message: String = "",
+    val data: List<TransactionData>? = null
 )
 
 @Serializable
-data class PersonChat(
-    val personId: String, // The ID of the person involved in the chat
-    val personAddress: String, // The address of the person
-    val transactions: List<TransactionChat> // All transactions with this person
-)
-
-@Serializable
-data class TransactionChat(
+data class TransactionData(
     val id: String,
-    val senderId: String,
     val senderAddress: String,
     val receiverAddress: String,
     val amount: String,
@@ -28,6 +21,5 @@ data class TransactionChat(
     val blockchain: String,
     val status: String,
     val timestamp: String,
-    val message: String
 )
 

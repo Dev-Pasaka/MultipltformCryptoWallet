@@ -16,8 +16,7 @@ import org.example.domain.entries.TransactionStatus
 import org.example.domain.entries.User
 import org.example.domain.entries.Wallet
 import org.example.presentation.dto.request.TransferCryptoReq
-import org.example.presentation.dto.response.PersonChat
-import org.example.presentation.dto.response.TransactionChat
+import org.example.presentation.dto.response.TransactionRes
 import org.example.presentation.dto.response.TransferCryptoRes
 
 class TransactionRepositoryImpl(
@@ -66,7 +65,6 @@ class TransactionRepositoryImpl(
                             message = "Wallet not found",
                         ), null
                     )
-
 
 
             /**
@@ -173,72 +171,25 @@ class TransactionRepositoryImpl(
 
     }
 
-    override suspend fun getTransactionsAsChats(walletId: String): List<Transaction> = withContext(
+    override suspend fun getTransactions(walletId: String): TransactionRes = withContext(
         Dispatchers.IO
     ) {
+
         val wallet = walletCollection.find(Filters.eq(Wallet::id.name, walletId)).firstOrNull()
-            ?: return@withContext emptyList()
-        val senderTransactions =
-            transactionCollection.find(Filters.eq(Transaction::senderAddress.name, wallet.address))
-                .toList()
-        val receiverTransactions =
-            transactionCollection.find(Filters.eq(Transaction::destinationAddress.name, wallet.address))
-                .toList()
-        return@withContext emptyList()
-
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getGroupedTransactions(walletId: String): List<PersonChat> = withContext(Dispatchers.IO) {
-        // Fetch the wallet using the wallet ID
-        val wallet = walletCollection.find(Filters.eq(Wallet::id.name, walletId)).firstOrNull()
-            ?: return@withContext emptyList()
-
-        // Get transactions where the wallet is either the sender or the receiver
-        val senderTransactions = transactionCollection.find(
-            Filters.eq(Transaction::senderAddress.name, wallet.address)
-        ).toList()
-
-        val receiverTransactions = transactionCollection.find(
-            Filters.eq(Transaction::destinationAddress.name, wallet.address)
-        ).toList()
-
-        // Combine both sender and receiver transactions
-        val allTransactions = senderTransactions + receiverTransactions
-
-        // Group transactions by the counterparty address
-        val groupedChats = allTransactions.groupBy { tx ->
-            if (wallet.address == tx.senderAddress) tx.destinationAddress else tx.senderAddress
-        }
-
-        // Map the grouped transactions into PersonChat format
-        groupedChats.map { (personAddress, transactions) ->
-            // Fetch the user associated with the wallet address (personAddress)
-            val userWalletId = walletCollection.find(Filters.eq(Wallet::address.name, personAddress)).firstOrNull()
-            ServerConfig.logger.info("UserWalletId: ${userWalletId}")
-            val user = userCollection.find(Filters.eq(User::walletId.name, userWalletId?.id)).firstOrNull()
-            println("User:$user")
-            val personId = user?.username ?: personAddress // Use username if available, otherwise address
-
-            PersonChat(
-                personId = personId,
-                personAddress = personAddress,
-                transactions = transactions.map { tx ->
-                    TransactionChat(
-                        id = tx.id,
-                        senderId = tx.senderId,
-                        senderAddress = tx.senderAddress,
-                        receiverAddress = tx.destinationAddress,
-                        amount = tx.amounts.firstOrNull() ?: "0.0",
-                        feeLevel = tx.feeLevel,
-                        blockchain = tx.blockchain,
-                        status = tx.status.name,
-                        timestamp = tx.timestamp,
-                        message = "Sent ${tx.amounts.firstOrNull() ?: "0.0"} " +
-                                "${tx.blockchain} from ${tx.senderAddress} to ${tx.destinationAddress}"
-                    )
-                }
+            ?: return@withContext TransactionRes(
+                httpStatusCode = 400,
+                status = false,
+                message = "Wallet not found",
             )
-        }
+
+        val transactions = transactionCollection.find(Filters.eq(Wallet::walletId.name, wallet.walletId)).toList()
+        return@withContext TransactionRes(
+            httpStatusCode = 200,
+            status = true,
+            message = "Transactions retrieved successfully",
+            data = transactions.map { it.toTransaction() }
+        )
     }
+
+
 }

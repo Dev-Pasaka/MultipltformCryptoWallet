@@ -8,7 +8,7 @@ import org.example.domain.usecases.transaction.CreateTransactionUseCase
 import org.example.domain.usecases.transaction.TransactionHistoryUseCase
 import org.example.domain.usecases.transaction.TransactionProcessor
 import org.example.presentation.dto.request.TransferCryptoReq
-import org.example.presentation.dto.response.PersonChat
+import org.example.presentation.dto.response.TransactionRes
 import org.example.presentation.dto.response.TransferCryptoRes
 
 class TransactionService(
@@ -19,7 +19,7 @@ class TransactionService(
     suspend fun createTransaction(body: TransferCryptoReq): TransferCryptoRes {
         return createTransactionUseCase(body)
     }
-    suspend fun transactionHistory(walletId: String): List<PersonChat> {
+    suspend fun transactionHistory(walletId: String): TransactionRes{
         return transactionHistoryUseCase(walletId)
     }
 
