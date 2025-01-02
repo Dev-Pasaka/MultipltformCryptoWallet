@@ -25,6 +25,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun CustomNumberKeyboard(
+    isDoneEnable: Boolean,
     onDone: (String) -> Unit
 ) {
     var enteredNumber by remember { mutableStateOf("") }
@@ -83,6 +84,7 @@ fun CustomNumberKeyboard(
 
         // Done button
         IconButton(
+            enabled = isDoneEnable,
             onClick = { onDone(enteredNumber) },
             modifier = Modifier
                 .padding(top = 16.dp)

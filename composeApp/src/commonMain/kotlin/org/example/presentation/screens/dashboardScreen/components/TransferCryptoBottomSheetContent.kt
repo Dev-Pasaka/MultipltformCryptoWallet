@@ -151,6 +151,7 @@ fun TransferCryptoBottomSheetContent(
             )
         }
         CustomNumberKeyboard(
+            isDoneEnable = address.isNotEmpty(),
             onDone = {
                 onNavigateToTransfer(it.toDoubleOrNull() ?: 0.0, address, selectedBlockchain, selectedTokenId)
             }

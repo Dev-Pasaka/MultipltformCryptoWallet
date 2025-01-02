@@ -4,6 +4,7 @@ import org.example.domain.usecase.requestLink.CreateRequestLinkUseCase
 import org.example.domain.usecase.requestLink.GetRequestLinkDataUseCase
 import org.example.domain.usecase.user.GetSessionStatusUseCase
 import org.example.domain.usecase.wallet.CreateWalletUseCase
+import org.example.domain.usecase.wallet.GetTransactionUseCase
 import org.example.domain.usecase.wallet.GetWalletUseCase
 import org.example.domain.usecase.wallet.ImportWalletUseCase
 import org.example.domain.usecase.wallet.TransferCryptoUseCase
@@ -17,4 +18,5 @@ val useCaseModule = module{
     single{ CreateRequestLinkUseCase(get())}
     single{ GetRequestLinkDataUseCase(get())}
     single{ TransferCryptoUseCase(get(), get())}
+    single{ GetTransactionUseCase(get(), get())}
 }

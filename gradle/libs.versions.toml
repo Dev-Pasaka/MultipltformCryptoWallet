@@ -48,6 +48,7 @@ koinComposeMultiplatform = "4.0.0"
 navigationCompose = "2.8.0-alpha08"
 core = "1.13.0"
 ktor-qr-code-gen = "4.1.1"
+material = "1.0.8"
 
 
 [libraries]
@@ -72,6 +73,7 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
 web-view = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "web-view"}
+placeholder = { module = "com.eygraber:compose-placeholder-material", version.ref = "material"}
 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
