@@ -5,7 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import org.example.presentation.screens.AuthScreen.AuthScreen
 import org.example.presentation.screens.QrCodeScannerScreen
 import org.example.presentation.screens.dashboardScreen.DashBoardScreen
 import org.example.presentation.screens.explorer.ExplorerScreen
@@ -53,9 +52,6 @@ fun NavGraph(
                     navController.navigate(QRCodeScanner(blockchain = blockchain, tokenId = tokenId))
                 }
             )
-        }
-        composable<Screen.AuthScreen> {
-            AuthScreen()
         }
         composable<Screen.OnBoarding> {
             OnBoardingScreen(

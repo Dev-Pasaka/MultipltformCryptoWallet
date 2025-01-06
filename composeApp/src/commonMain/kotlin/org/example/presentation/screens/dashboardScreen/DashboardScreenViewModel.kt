@@ -124,24 +124,7 @@ class DashboardScreenViewModel(
                         transactionsState = transactionsState.copy(
                             isLoading = false,
                             isSuccessful = true,
-                            transactions = result.data?.map{transaction->
-                                var transactionData = transaction
-                                walletState.wallets.forEach{wallet->
-                                    transactionData = if (wallet.address == transaction.senderAddress){
-                                        transaction.copy(
-                                            transactionType = "OUT"
-                                        )
-                                    }
-                                    else if (wallet.address == transaction.receiverAddress){
-                                        transaction.copy(
-                                            transactionType = "IN"
-                                        )
-                                    }
-                                    else transaction
-                                }
-                                transactionData
-
-                            } ?: emptyList()
+                            transactions = result.data ?: emptyList()
                         )
                         println("Success: ${result.data}")
                     }

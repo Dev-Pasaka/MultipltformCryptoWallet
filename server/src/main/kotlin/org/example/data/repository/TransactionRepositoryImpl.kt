@@ -131,7 +131,7 @@ class TransactionRepositoryImpl(
              * */
             val transaction = Transaction(
                 senderId = "",
-                walletId = wallet.walletId,
+                walletId = wallet.id,
                 tokenId = walletBalance.token.id,
                 amounts = listOf(body.amount.toString()),
                 senderAddress = wallet.address,
