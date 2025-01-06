@@ -1,6 +1,7 @@
 package example.com.data.datasource.remote.response.getTransactions
 
 import kotlinx.serialization.Serializable
+import org.example.presentation.dto.response.TransactionData
 
 @Serializable
 data class Transaction(
@@ -18,7 +19,7 @@ data class Transaction(
     val errorDetails: String? = null,
     val errorReason: String? = null,
     val estimatedFee: EstimatedFee? = null,
-    val feeLevel: FeeLevel? = null,
+    val feeLevel: String? = null,
     val firstConfirmDate: String,
     val id: String,
     val networkFee: String,
@@ -35,4 +36,17 @@ data class Transaction(
     val updateDate: String,
     val userId: String? = null,
     val walletId: String
-)
+){
+    fun toTransaction()  = TransactionData(
+        id = id,
+        sourceAddress = sourceAddress,
+        destinationAddress = destinationAddress,
+        amount = amounts?.get(0) ?: "",
+        feeLevel = feeLevel ?: "0.0",
+        blockchain = blockchain,
+        status = state,
+        timestamp = createDate,
+        networkFee = networkFee,
+        transactionType = transactionType
+    )
+}
