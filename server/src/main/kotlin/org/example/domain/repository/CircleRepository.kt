@@ -31,6 +31,7 @@ interface CircleRepository {
     suspend fun getWalletBalance(walletId:String): GetWalletBalanceRes
     suspend fun transferCrypto(body: TransferCryptoReq): TransferCryptoRes
     suspend fun getAllTransactions():GetAllTransactionsRes
+    suspend fun getAllTransactionsInWallet(walletIds: List<String>):GetAllTransactionsRes
     suspend fun getTransaction(id:String): GetTransactionRes
     suspend fun validateAddress(walletAddress:String, blockchain: String):ValidateAddressRes
     suspend fun estimateGasFee(amount:String, destinationAddress:String, sourceAddress:String, blockchain: String):EstimateGasFeeRes

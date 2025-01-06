@@ -9,10 +9,11 @@ data class Data(
     val blockchain: String,
     val feeLevel: String,
     val id: String,
-    val receiverAddress: String,
-    val senderAddress: String,
+    val destinationAddress: String,
+    val sourceAddress: String,
     val status: String,
-    val timestamp: String
+    val timestamp: String,
+    val transactionType: String
 ){
     fun toTransaction(): Transaction {
         return Transaction(
@@ -20,10 +21,15 @@ data class Data(
             blockchain = blockchain,
             feeLevel = feeLevel,
             id = id,
-            receiverAddress = receiverAddress,
-            senderAddress = senderAddress,
+            receiverAddress = destinationAddress,
+            senderAddress = sourceAddress,
             status = status,
-            timestamp = timestamp
+            timestamp = timestamp,
+            transactionType = when(transactionType){
+                "INBOUND" -> "IN"
+                "OUTBOUND" -> "OUT"
+                else -> ""
+            }
 
         )
     }

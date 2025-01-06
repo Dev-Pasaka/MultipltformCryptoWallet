@@ -14,13 +14,14 @@ data class TransactionRes(
 @Serializable
 data class TransactionData(
     val id: String,
-    val senderAddress: String,
-    val receiverAddress: String,
+    val sourceAddress: String,
+    val destinationAddress: String,
     val amount: String,
     val feeLevel: String,
     val blockchain: String,
     val status: String,
     val timestamp: String,
+    val networkFee: String,
     val transactionType: String = ""
 )
 

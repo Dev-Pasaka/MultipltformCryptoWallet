@@ -17,18 +17,7 @@ data class Transaction(
     val blockchain: String,
     val status: TransactionStatus = TransactionStatus.PENDING,
     val timestamp: String = TimeUtils.getCurrentUtcTimestamp().toString()
-){
-    fun toTransaction() = TransactionData(
-        id = id,
-        amount = amounts.first(),
-        senderAddress = senderAddress,
-        receiverAddress = destinationAddress,
-        feeLevel = feeLevel,
-        blockchain = blockchain,
-        status = status.name,
-        timestamp = timestamp
-    )
-}
+)
 
 enum class TransactionStatus{
     PENDING,

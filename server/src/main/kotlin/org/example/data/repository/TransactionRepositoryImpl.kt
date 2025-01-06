@@ -175,20 +175,17 @@ class TransactionRepositoryImpl(
         Dispatchers.IO
     ) {
 
-        val wallet = walletCollection.find(Filters.eq(Wallet::id.name, walletId)).firstOrNull()
-            ?: return@withContext TransactionRes(
-                httpStatusCode = 400,
-                status = false,
-                message = "Wallet not found",
-            )
-
-        val transactions = transactionCollection.find(Filters.eq(Wallet::walletId.name, wallet.walletId)).toList()
-        return@withContext TransactionRes(
-            httpStatusCode = 200,
-            status = true,
-            message = "Transactions retrieved successfully",
-            data = transactions.map { it.toTransaction() }
+        val wallet = walletCollection.find(Filters.eq(Wallet::id.name, walletId)).toList()
+        if (wallet.isEmpty()) return@withContext TransactionRes(
+            httpStatusCode = 400,
+            status = false,
+            message = "Wallet not found",
         )
+
+        val transactions = circleRepository.getAllTransactionsInWallet(
+            walletIds = wallet.map { it.walletId }
+        )
+        return@withContext transactions.toTransactionRes()
     }
 
 

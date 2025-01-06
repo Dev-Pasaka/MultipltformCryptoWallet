@@ -23,6 +23,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import org.example.data.datasource.remote.requests.CancelTransactionReq
 import org.example.data.datasource.remote.response.createWalletSets.CreateWalletSetsRes
 import org.example.data.datasource.remote.response.getWalletSet.GetWalletSetRes
@@ -172,6 +175,15 @@ class CircleRepositoryImpl(
     override suspend fun getAllTransactions(): GetAllTransactionsRes = withContext(Dispatchers.IO) {
         api.client.get(urlString = "${circle.baseUrl}transactions") {
             header(HttpHeaders.Authorization, "Bearer ${circle.apiKey}")
+        }.body<GetAllTransactionsRes>()
+    }
+
+    override suspend fun getAllTransactionsInWallet(walletIds: List<String>):GetAllTransactionsRes = withContext(Dispatchers.IO) {
+        val formattedStr = walletIds.joinToString(",") { "[$it]" }
+        println(formattedStr)
+        api.client.get(urlString = "${circle.baseUrl}transactions") {
+            header(HttpHeaders.Authorization, "Bearer ${circle.apiKey}")
+            parameter("walletIds", formattedStr)
         }.body<GetAllTransactionsRes>()
     }
 
