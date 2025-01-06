@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 import org.example.domain.model.WalletSecrete
 import org.example.presentation.screens.onBoarding.components.CreateWalletBottomSheetContent
 import org.example.presentation.screens.onBoarding.components.ImportWalletBottomSheet
-import org.example.presentation.screens.onBoarding.components.OnBoardingScreenUpperSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,14 +99,6 @@ fun OnBoardingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                OnBoardingScreenUpperSection(
-                    actionRegister = {
-
-                    },
-                    actionSignIn = {
-
-                    }
-                )
                 OnBoardingScreenMiddleSection(
                     items = viewModel.onBoardingData
                 )
