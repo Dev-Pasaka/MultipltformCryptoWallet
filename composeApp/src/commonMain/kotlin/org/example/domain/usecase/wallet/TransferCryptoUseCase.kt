@@ -25,7 +25,9 @@ class TransferCryptoUseCase(
                 walletId =walletId,
                 idempotencyKey = generateUUID()
             )
+
             val response = repository.transferCrypto(data)
+            println("Transfer response: $response")
             if (response.status){
                 emit(Resource.Success(data = response, message = "Success"))
             }else{

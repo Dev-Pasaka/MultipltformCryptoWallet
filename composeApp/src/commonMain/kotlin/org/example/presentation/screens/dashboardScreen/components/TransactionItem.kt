@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import cryptowallet.composeapp.generated.resources.eth_icon
 import org.example.common.convertToLocalTime
 import org.example.common.convertToSignificantString
 import org.example.domain.model.Transaction
+import org.example.presentation.theme.darkGreen
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -89,16 +91,36 @@ fun TransactionItem(
 
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = transaction.status,
+                        text = when(transaction.transactionType){
+                          "IN" -> "CREDIT"
+                          "OUT" -> "DEBIT"
+                          else -> ""
+                        },
                         style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = when(transaction.transactionType){
+                            "IN" -> darkGreen
+                            "OUT" -> Color.Red
+                            else -> MaterialTheme.colorScheme.tertiary
+                        },
                         modifier = Modifier.padding(start = 8.dp)
                     )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = transaction.status,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
 
             }

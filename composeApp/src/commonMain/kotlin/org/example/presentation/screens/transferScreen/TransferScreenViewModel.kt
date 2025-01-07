@@ -7,6 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.example.common.Resource
 import org.example.data.remote.dto.request.TransferCryptoReq
@@ -18,6 +21,8 @@ class TransferScreenViewModel(
         private set
 
 
+    private val _transferringEvent = MutableSharedFlow<DialogBoxEvents>()
+    val transferringEvent = _transferringEvent.asSharedFlow()
 
 
     fun transferCrypto(
@@ -34,6 +39,12 @@ class TransferScreenViewModel(
                             message = result.message ?: "Success"
                         )
                         println(result.message)
+                        _transferringEvent.emit(
+                            DialogBoxEvents(
+                                status = "Success",
+                                message = result.message ?: "Success"
+                            )
+                        )
                     }
 
                     is Resource.Error -> {
@@ -43,6 +54,12 @@ class TransferScreenViewModel(
                             message = result.message ?: "Error"
                         )
                         println(result.message)
+                        _transferringEvent.emit(
+                            DialogBoxEvents(
+                                status = "Error",
+                                message = result.message ?: "An expected error occurred"
+                            )
+                        )
 
                     }
 
@@ -53,6 +70,12 @@ class TransferScreenViewModel(
                             message = ""
                         )
                         println(result.message)
+                        _transferringEvent.emit(
+                            DialogBoxEvents(
+                                status = "Transferring",
+                                message = "Transferring..."
+                            )
+                        )
 
                     }
 

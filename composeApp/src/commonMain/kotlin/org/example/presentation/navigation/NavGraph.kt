@@ -46,7 +46,11 @@ fun NavGraph(
                             blockchain = blockchain,
                             tokenId = selectedTokenId
                         )
-                    )
+                    ){
+                        popUpTo(Screen.DashBoard){
+                            inclusive = true
+                        }
+                    }
                 },
                 onOpenQRCodeScreen = {blockchain, tokenId ->
                     navController.navigate(QRCodeScanner(blockchain = blockchain, tokenId = tokenId))
