@@ -24,10 +24,11 @@ import qrscanner.QrScanner
 
 @Composable
 fun QrCodeScannerScreen(
+    individualWalletId: String,
     tokenId: String,
     blockchain: String,
     onNavigateBack: () -> Unit,
-    onNavigateToTransfer: (String, Double, String, String) -> Unit
+    onNavigateToTransfer: (String, Double, String, String,String) -> Unit
 ) {
     var qrCodeData by remember { mutableStateOf("") }
     var flashlightOn by remember { mutableStateOf(false) }
@@ -46,7 +47,7 @@ fun QrCodeScannerScreen(
             val address = obj?.get("address")
             val amount = obj?.get("amount")?.toDoubleOrNull()
             if (address != null && amount != null){
-                onNavigateToTransfer(address, amount, blockchain, tokenId)
+                onNavigateToTransfer(address, amount, blockchain, tokenId, individualWalletId)
             }
         }
     }

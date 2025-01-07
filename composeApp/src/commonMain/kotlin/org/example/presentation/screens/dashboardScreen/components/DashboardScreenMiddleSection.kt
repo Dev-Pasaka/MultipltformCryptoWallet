@@ -35,6 +35,7 @@ fun DashboardScreenMiddleSection(
     onNavigateToExplorer: (String) -> Unit,
     onRequest: (Pair<String, String>) -> Unit,
     onSelectWalletId: (String) -> Unit,
+    onSelectIndividualWalletId: (String) -> Unit,
     onSend: (String, String) -> Unit,
     isWalletLoading: Boolean,
 ) {
@@ -82,7 +83,8 @@ fun DashboardScreenMiddleSection(
                     onNavigateToExplorer = onNavigateToExplorer,
                     onRequest = onRequest,
                     onSend = onSend,
-                    onSelectWalletId = onSelectWalletId
+                    onSelectWalletId = onSelectWalletId,
+                    onSelectIndividualWalletId = onSelectIndividualWalletId
                 )
 
             }

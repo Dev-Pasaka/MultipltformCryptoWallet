@@ -38,22 +38,29 @@ fun NavGraph(
                 onNavigateToExplorer = { url ->
                     navController.navigate(Explorer(url))
                 },
-                onNavigateToTransfer = { amount, address, blockchain, selectedTokenId ->
+                onNavigateToTransfer = { amount, address, blockchain, selectedTokenId, individualWalletId ->
                     navController.navigate(
                         TransactScreen(
+                            individualWalletId = individualWalletId,
                             amount = amount.toString(),
                             address = address,
                             blockchain = blockchain,
                             tokenId = selectedTokenId
                         )
-                    ){
-                        popUpTo(Screen.DashBoard){
+                    ) {
+                        popUpTo(Screen.DashBoard) {
                             inclusive = true
                         }
                     }
                 },
-                onOpenQRCodeScreen = {blockchain, tokenId ->
-                    navController.navigate(QRCodeScanner(blockchain = blockchain, tokenId = tokenId))
+                onOpenQRCodeScreen = { blockchain, tokenId, individualWalletId ->
+                    navController.navigate(
+                        QRCodeScanner(
+                            individualWalletId = individualWalletId,
+                            blockchain = blockchain,
+                            tokenId = tokenId
+                        )
+                    )
                 }
             )
         }
@@ -77,18 +84,20 @@ fun NavGraph(
                 }
             )
         }
-        composable<QRCodeScanner> {backStackEntry ->
+        composable<QRCodeScanner> { backStackEntry ->
             val data: QRCodeScanner = backStackEntry.toRoute()
 
             QrCodeScannerScreen(
+                individualWalletId = data.individualWalletId,
                 tokenId = data.tokenId,
                 blockchain = data.blockchain,
                 onNavigateBack = {
                     navController.navigateUp()
                 },
-                onNavigateToTransfer = { address, amount, blockchain, tokenId ->
+                onNavigateToTransfer = { address, amount, blockchain, tokenId, individualWalletId ->
                     navController.navigate(
                         TransactScreen(
+                            individualWalletId = individualWalletId,
                             address = address,
                             amount = amount.toString(),
                             blockchain = blockchain,
@@ -102,12 +111,13 @@ fun NavGraph(
             val data: TransactScreen = backStackEntry.toRoute()
             TransferScreen(
                 tokenId = data.tokenId,
+                individualWalletId = data.individualWalletId,
                 blockchain = data.blockchain,
                 address = data.address,
                 amount = data.amount,
                 onCancel = {
-                    navController.navigate(Screen.DashBoard){
-                        popUpTo<Screen.DashBoard>{
+                    navController.navigate(Screen.DashBoard) {
+                        popUpTo<Screen.DashBoard> {
                             inclusive = true
                         }
                     }

@@ -12,28 +12,25 @@ import org.example.domain.repository.WalletRepository
 
 class TransferCryptoUseCase(
     private val repository: WalletRepository,
-    private val keyValueStorage: KeyValueStorage
 ) {
     operator fun invoke(
         body: TransferCryptoReq
     ): Flow<Resource<TransferCryptoRes>> = flow {
         emit(Resource.Loading())
         try {
-            val walletId = keyValueStorage.getString(Constants.WALLET_ID) ?: ""
 
             val data = body.copy(
-                walletId =walletId,
                 idempotencyKey = generateUUID()
             )
 
             val response = repository.transferCrypto(data)
             println("Transfer response: $response")
-            if (response.status){
+            if (response.status) {
                 emit(Resource.Success(data = response, message = "Success"))
-            }else{
+            } else {
                 emit(Resource.Error(response.message))
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(Resource.Error(e.message.toString()))
         }
