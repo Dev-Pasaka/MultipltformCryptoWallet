@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun SuccessDialog(isVisible: Boolean, onClose: () -> Unit) {
+fun SuccessDialog(isVisible: Boolean, message: String, onClose: () -> Unit) {
     DialogBox(
         title = "Success",
-        message = "Transaction completed successfully.",
+        message = message,
         isVisible = isVisible,
         onClose = onClose,
         backgroundColor = Color(0xFF4CAF50), // Green background

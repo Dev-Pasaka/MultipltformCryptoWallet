@@ -51,8 +51,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun DashBoardScreen(
     onNavigateToExplorer: (String) -> Unit,
-    onOpenQRCodeScreen: (String, String) -> Unit,
-    onNavigateToTransfer: (Double, String, String, String) -> Unit
+    onOpenQRCodeScreen: (String, String, String) -> Unit,
+    onNavigateToTransfer: (Double, String, String, String, String) -> Unit
 ) {
     val viewModel: DashboardScreenViewModel = koinViewModel()
 
@@ -69,6 +69,10 @@ fun DashBoardScreen(
     var walletId by remember {
         mutableStateOf("")
     }
+    var selectedIndividualWalletId by remember {
+        mutableStateOf("")
+    }
+
     val scope = rememberCoroutineScope()
     var selectedBottomSheetContent by mutableStateOf("")
 
@@ -103,12 +107,14 @@ fun DashBoardScreen(
                 )
 
                 "Send" -> TransferCryptoBottomSheetContent(
+                    selectedIndividualWalletId = selectedIndividualWalletId,
                     selectedBlockchain = selectedBlockchain,
                     selectedTokenId = selectedTokenId,
                     onOpenQrScanner = {
                         onOpenQRCodeScreen(
                             selectedBlockchain,
-                            selectedTokenId
+                            selectedTokenId,
+                            selectedIndividualWalletId
                         )
                     },
                     onCancel = {
@@ -150,6 +156,7 @@ fun DashBoardScreen(
                         walletContent = content
                     },
                     onSelectWalletId = { walletId = it },
+                    onSelectIndividualWalletId = { selectedIndividualWalletId = it },
                     onSend = { blockchain, tokenId ->
                         scope.launch {
                             bottomSheetScaffoldState.bottomSheetState.expand()

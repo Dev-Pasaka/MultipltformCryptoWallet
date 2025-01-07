@@ -6,30 +6,37 @@ import kotlinx.serialization.Serializable
 sealed class Screen() {
     @Serializable
     object Splash : Screen()
+
     @Serializable
     object DashBoard : Screen()
+
     @Serializable
-    object AuthScreen: Screen()
+    object AuthScreen : Screen()
+
     @Serializable
     object OnBoarding : Screen()
 
 }
 
 
-
 @Serializable
-data class QRCodeScanner(val blockchain: String, val tokenId : String) : Screen()
+data class QRCodeScanner(
+    val individualWalletId: String,
+    val blockchain: String,
+    val tokenId: String
+) : Screen()
 
 @Serializable
 data class Explorer(
     val url: String
-): Screen()
+) : Screen()
 
 @Serializable
 data class TransactScreen(
+    val individualWalletId: String,
     val address: String,
     val blockchain: String,
     val tokenId: String,
     val amount: String
-) :Screen()
+) : Screen()
 

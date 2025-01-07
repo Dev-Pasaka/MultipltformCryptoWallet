@@ -1,16 +1,11 @@
 package org.example.presentation.screens.transferScreen
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -32,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cryptowallet.composeapp.generated.resources.Res
@@ -43,17 +37,15 @@ import cryptowallet.composeapp.generated.resources.sol_icon
 import org.jetbrains.compose.resources.painterResource
 import  androidx.compose.runtime.setValue
 import  androidx.compose.runtime.getValue
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.delay
 import org.example.data.remote.dto.request.TransferCryptoReq
-import org.example.presentation.screens.transferScreen.components.DialogBox
+import org.example.presentation.screens.transferScreen.components.ErrorDialog
 import org.example.presentation.screens.transferScreen.components.SuccessDialog
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TransferScreen(
+    individualWalletId: String,
     blockchain: String = "ETH-SEPOLIA",
     tokenId: String,
     address: String,
@@ -76,6 +68,7 @@ fun TransferScreen(
     // Dialogs
     SuccessDialog(
         isVisible = showSuccessDialog,
+        message = dialogMessage,
         onClose = {
             showSuccessDialog = false
             onCancel()
@@ -83,6 +76,7 @@ fun TransferScreen(
     )
     ErrorDialog(
         isVisible = showErrorDialog,
+        message = dialogMessage,
         onClose = {
             showErrorDialog = false
             onCancel()
@@ -96,12 +90,12 @@ fun TransferScreen(
         when (trasferDialogEvents.value.status) {
             "Success" -> {
                 showSuccessDialog = true
-                dialogMessage = trasferDialogEvents.value.message
+                dialogMessage = viewModel.transferState.message
             }
 
             "Error" -> {
                 showErrorDialog = true
-                dialogMessage = trasferDialogEvents.value.message
+                dialogMessage = viewModel.transferState.message
             }
 
             else -> {}
@@ -218,7 +212,7 @@ fun TransferScreen(
                                     idempotencyKey = "",
                                     destinationAddress = address,
                                     amount = amount.toDouble(),
-                                    walletId = "",
+                                    walletId = individualWalletId,
                                     tokenId = tokenId
                                 )
                             )

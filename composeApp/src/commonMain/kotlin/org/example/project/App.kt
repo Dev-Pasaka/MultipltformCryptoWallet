@@ -13,8 +13,8 @@ import org.example.presentation.theme.AppTheme
 @Composable
 @Preview
 fun App() {
+    val navController = rememberNavController()
     AppTheme {
-        val navController = rememberNavController()
         NavGraph(
             navController = navController
         )

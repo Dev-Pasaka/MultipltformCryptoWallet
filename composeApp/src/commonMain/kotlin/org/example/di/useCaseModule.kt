@@ -17,6 +17,6 @@ val useCaseModule = module{
     single{GetSessionStatusUseCase(get())}
     single{ CreateRequestLinkUseCase(get())}
     single{ GetRequestLinkDataUseCase(get())}
-    single{ TransferCryptoUseCase(get(), get())}
+    single{ TransferCryptoUseCase(get())}
     single{ GetTransactionUseCase(get(), get())}
 }

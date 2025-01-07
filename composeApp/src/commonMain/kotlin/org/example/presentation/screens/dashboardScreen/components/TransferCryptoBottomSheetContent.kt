@@ -33,11 +33,12 @@ import cryptowallet.composeapp.generated.resources.qr_code
 
 @Composable
 fun TransferCryptoBottomSheetContent(
+    selectedIndividualWalletId: String,
     selectedBlockchain: String,
     selectedTokenId: String,
     onCancel: () -> Unit,
-    onOpenQrScanner : () -> Unit,
-    onNavigateToTransfer: (Double,String,String, String) -> Unit
+    onOpenQrScanner: () -> Unit,
+    onNavigateToTransfer: (Double, String, String, String, String) -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     var address by remember {
@@ -94,12 +95,13 @@ fun TransferCryptoBottomSheetContent(
 
                 ),
                 trailingIcon = {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
 
                         verticalAlignment = Alignment.CenterVertically,
 
-                    ){
-                        AnimatedVisibility(address.isEmpty()){
+                        ) {
+                        AnimatedVisibility(address.isEmpty()) {
                             IconButton(
                                 onClick = {
                                     val text = clipboardManager.getText()
@@ -114,7 +116,7 @@ fun TransferCryptoBottomSheetContent(
                                 )
                             }
                         }
-                        AnimatedVisibility(address.isNotEmpty()){
+                        AnimatedVisibility(address.isNotEmpty()) {
                             IconButton(
                                 onClick = {
                                     address = ""
@@ -130,14 +132,14 @@ fun TransferCryptoBottomSheetContent(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        AnimatedVisibility(address.isEmpty()){
+                        AnimatedVisibility(address.isEmpty()) {
                             IconButton(
                                 onClick = {
                                     onOpenQrScanner()
                                 }
                             ) {
                                 Icon(
-                                    painter =  painterResource(Res.drawable.qr_code),
+                                    painter = painterResource(Res.drawable.qr_code),
                                     contentDescription = "Clear",
                                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                                     modifier = Modifier.size(32.dp)
@@ -153,7 +155,13 @@ fun TransferCryptoBottomSheetContent(
         CustomNumberKeyboard(
             isDoneEnable = address.isNotEmpty(),
             onDone = {
-                onNavigateToTransfer(it.toDoubleOrNull() ?: 0.0, address, selectedBlockchain, selectedTokenId)
+                onNavigateToTransfer(
+                    it.toDoubleOrNull() ?: 0.0,
+                    address,
+                    selectedBlockchain,
+                    selectedTokenId,
+                    selectedIndividualWalletId
+                )
             }
         )
     }
