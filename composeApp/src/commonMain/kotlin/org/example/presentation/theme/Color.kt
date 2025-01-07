@@ -4,7 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 
 
-
+val darkGreen = Color(0xFf06402B)
 val Primary = Color(0xFFFFBE44)
 val Secondary = Color(0xFF886034)
 val Tertiary = Color(0xFFD3CBBF)

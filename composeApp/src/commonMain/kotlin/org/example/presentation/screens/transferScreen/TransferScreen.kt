@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -43,8 +45,10 @@ import  androidx.compose.runtime.setValue
 import  androidx.compose.runtime.getValue
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import org.example.data.remote.dto.request.TransferCryptoReq
+import org.example.presentation.screens.transferScreen.components.DialogBox
 import org.example.presentation.screens.transferScreen.components.SuccessDialog
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -57,25 +61,50 @@ fun TransferScreen(
     onCancel: () -> Unit
 ) {
     val viewModel: TransferScreenViewModel = koinViewModel()
+    var trasferDialogEvents = viewModel.transferringEvent.collectAsStateWithLifecycle(
+        DialogBoxEvents(
+            status = "",
+            message = ""
+        )
+    )
 
+    // State for showing dialogs
     var showSuccessDialog by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
 
     // Dialogs
-    SuccessDialog(isVisible = showSuccessDialog, onClose = {
-        showSuccessDialog = false
-        onCancel()
-    })
-    ErrorDialog(isVisible = showErrorDialog == false, onClose = {
-        showErrorDialog = false
-        onCancel()
-    })
+    SuccessDialog(
+        isVisible = showSuccessDialog,
+        onClose = {
+            showSuccessDialog = false
+            onCancel()
+        }
+    )
+    ErrorDialog(
+        isVisible = showErrorDialog,
+        onClose = {
+            showErrorDialog = false
+            onCancel()
+        }
+    )
 
-    LaunchedEffect(viewModel.transferState.isSuccess){
-        if (viewModel.transferState.isSuccess){
-            showSuccessDialog = true
-        }else{
-            showErrorDialog = true
+    LaunchedEffect(
+        key1 = trasferDialogEvents.value.status,
+        key2 = trasferDialogEvents.value.message
+    ) {
+        when (trasferDialogEvents.value.status) {
+            "Success" -> {
+                showSuccessDialog = true
+                dialogMessage = trasferDialogEvents.value.message
+            }
+
+            "Error" -> {
+                showErrorDialog = true
+                dialogMessage = trasferDialogEvents.value.message
+            }
+
+            else -> {}
         }
 
     }
@@ -174,101 +203,43 @@ fun TransferScreen(
                     modifier = Modifier.fillMaxWidth()
                         .padding(bottom = 8.dp)
                 ) {
-                    LongPressButton(
-                        onLongPress = {
+                    Button(
+                        enabled = !viewModel.transferState.isLoading,
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        onClick = {
                             viewModel.transferCrypto(
                                 TransferCryptoReq(
+                                    idempotencyKey = "",
                                     destinationAddress = address,
                                     amount = amount.toDouble(),
                                     walletId = "",
-                                    idempotencyKey = "",
-                                    tokenId = tokenId,
+                                    tokenId = tokenId
                                 )
                             )
                         }
-                    )
-                }
-
-            }
-        }
-    }
-}
-
-
-
-@Composable
-fun LongPressButton(
-    onLongPress: () -> Unit
-) {
-    var isLongPressed by remember { mutableStateOf(false) }
-    var fillFraction by remember { mutableStateOf(0f) }
-    val color =  MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.3f)
-
-    val animatedFillFraction by animateFloatAsState(
-        targetValue = fillFraction,
-        animationSpec = androidx.compose.animation.core.tween(durationMillis = 800)
-    )
-
-    LaunchedEffect(Unit) {
-            for (i in 0..100) {
-                fillFraction = i / 100f
-                delay(8) // Adjust speed
-            }
-            fillFraction = 1f
-        onLongPress()
-
-    }
-
-
-
-    Surface(
-        shape = RoundedCornerShape(14.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = {
-                        isLongPressed = true
-                        // Simulate the filling effect
-
-                    },
-                    onPress = {
-                        tryAwaitRelease()
-                        fillFraction = 0f // Reset on release
-                        isLongPressed = false
+                    ) {
+                        Text(
+                            text = if (viewModel.transferState.isLoading) "Transferring..." else "Transfer",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
-                )
-            },
-        color = MaterialTheme.colorScheme.primary
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                clipRect {
-                    drawRoundRect(
-                        color = color,
-                        size = size.copy(height = size.height * animatedFillFraction),
-                        cornerRadius = CornerRadius(14.dp.toPx(), 14.dp.toPx())
-                    )
                 }
             }
 
-            Text(
-                text = if (isLongPressed) "Sending..." else "Hold to send",
-                color = MaterialTheme.colorScheme.onPrimary
-            )
         }
+
     }
-
-
-
-
 }
+
+
+
+
+
 

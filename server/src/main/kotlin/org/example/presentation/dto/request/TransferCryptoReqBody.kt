@@ -3,7 +3,7 @@ package org.example.presentation.dto.request
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TransferCryptoReq(
+data class TransferCryptoReqBody(
     val walletId: String,
     val tokenId: String,
     val idempotencyKey: String,

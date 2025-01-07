@@ -15,7 +15,7 @@ import org.example.domain.entries.Transaction
 import org.example.domain.entries.TransactionStatus
 import org.example.domain.entries.User
 import org.example.domain.entries.Wallet
-import org.example.presentation.dto.request.TransferCryptoReq
+import org.example.presentation.dto.request.TransferCryptoReqBody
 import org.example.presentation.dto.response.TransactionRes
 import org.example.presentation.dto.response.TransferCryptoRes
 
@@ -30,7 +30,7 @@ class TransactionRepositoryImpl(
     private val userCollection = db.database.getCollection<User>("user")
 
 
-    override suspend fun createTransaction(body: TransferCryptoReq): Pair<TransferCryptoRes, Transaction?> =
+    override suspend fun createTransaction(body: TransferCryptoReqBody): Pair<TransferCryptoRes, Transaction?> =
         withContext(Dispatchers.IO) {
 
             /**

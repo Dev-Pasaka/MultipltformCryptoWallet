@@ -9,7 +9,7 @@ import org.koin.dsl.module
 val serviceModule = module {
     single { WalletService(get(), get(), get(), get(), get()) }
     single { UserService(get(), get(), get()) }
-    single { TransactionService(get(), get(), get()) }
+    single { TransactionService(get(), get()) }
     single { RequestLinkService(get(), get()) }
 
 }

@@ -1,6 +1,6 @@
 package org.example.domain.repository
 
-import example.com.data.datasource.remote.requests.TransferCryptoReq
+import org.example.data.datasource.remote.requests.TransferCryptoReq
 import example.com.data.datasource.remote.response.cancelTransaction.CancelTransactionRes
 import example.com.data.datasource.remote.response.createWalletRes.CreateWalletRes
 import example.com.data.datasource.remote.response.estimateGasFee.EstimateGasFeeRes
