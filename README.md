@@ -160,18 +160,25 @@ Or alternetivley run this gradlew command
 ## Screenshots
 
 ### Desktop
-![](screenshots/desk1.png)
-![](screenshots/desk2.png)
-![](screenshots/desk3.png)
-![](screenshots/desk4.png)
-![](screenshots/desk5.png)
+<img height="926" src="screenshots/desk1.png" width="459"/>
+
+<img height="1080" src="screenshots/desk2.png" width="1920"/>
+
+<img height="1080" src="screenshots/desk3.png" width="1920"/>
+
+<img height="926" src="screenshots/desk4.png" width="459"/>
+<img height="926" src="screenshots/desk5.png" width="459"/>
 
 ### Android
 
-![](screenshots/getstarted.png)
-![](screenshots/dark-mode.png)
-![](screenshots/light-theme.png)
-![](screenshots/webview.png)
+<img height="926" src="screenshots/getstarted.png" width="459"/>
+
+<img height="926" src="screenshots/dark-mode.png" width="459"/>
+
+<img height="926" src="screenshots/light-theme.png" width="459"/>
+
+<img height="926" src="screenshots/webview.png" width="459"/>
+
 
 
 ### Testing Wallets
