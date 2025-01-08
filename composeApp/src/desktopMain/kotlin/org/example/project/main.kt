@@ -14,10 +14,13 @@ import kotlinx.coroutines.runBlocking
 import org.example.di.initKoin
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import cryptowallet.composeapp.generated.resources.Res
+import cryptowallet.composeapp.generated.resources.app_icon
 import dev.datlag.kcef.KCEF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.painterResource
 import java.io.File
 import kotlin.math.max
 
@@ -26,6 +29,8 @@ fun main() = runBlocking {
 
     application {
         Window(
+
+            icon = painterResource(Res.drawable.app_icon),
             resizable = true,
             state = WindowState(
                 width = 450.dp,

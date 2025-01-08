@@ -1,5 +1,7 @@
 # Multiplatform Crypto Wallet (SmartPesa)
 
+<img height="150" src="screenshots/app-icon.webp" title="Logo" width="150"/>
+
 ## Overview
 **SmartPesa** is an innovative, Kotlin Multiplatform (KMP)-based open-source project designed to revolutionize cryptocurrency wallet management across multiple platforms. By leveraging advanced KMP technology, SmartPesa ensures a seamless and secure experience for users, enabling effortless transactions by simply scanning a QR code.
 
@@ -8,6 +10,10 @@
 - **Enhanced Security**: Mitigate wallet poisoning attacks in crypto markets.
 - **User-Friendly**: Designed for both crypto newcomers and seasoned users.
 - **Financial Inclusion**: Focused on empowering unbanked and underbanked populations, particularly in Sub-Saharan Africa.
+
+### Request for crypto payment demo 
+[![Watch the video](https://raw.githubusercontent.com/username/repository/branch/path/to/thumbnail.jpg)](https://raw.githubusercontent.com/username/repository/branch/path/to/video.mp4)
+
 
 ### Components
 SmartPesa comprises:
