@@ -12,7 +12,7 @@
 - **Financial Inclusion**: Focused on empowering unbanked and underbanked populations, particularly in Sub-Saharan Africa.
 
 ### Request for crypto payment demo 
-<iframe width="560" height="315" src="https://youtube.com/shorts/mtvh5WivxTg" frameborder="0" allowfullscreen></iframe>
+[![Watch the video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 
 ### Components
