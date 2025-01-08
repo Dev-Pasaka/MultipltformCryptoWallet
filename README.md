@@ -12,8 +12,10 @@
 - **Financial Inclusion**: Focused on empowering unbanked and underbanked populations, particularly in Sub-Saharan Africa.
 
 ### Request for crypto payment demo 
-[![Watch the video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-
+<video width="560" height="315" controls>
+  <source src="https://github.com/Dev-Pasaka/MultipltformCryptoWallet/blob/main/screenshots/generating%20crypto%20payment%20request.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ### Components
 SmartPesa comprises:
