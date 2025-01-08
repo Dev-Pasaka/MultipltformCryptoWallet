@@ -70,7 +70,7 @@ fun ExplorerScreen(
     }
 
     LaunchedEffect(state.isLoading) {
-        delay(5000)
+        delay(10000)
         if (state.isLoading){
             uriHandler.openUri(url)
             onNavigateBack()
