@@ -162,9 +162,9 @@ Or alternetivley run this gradlew command
 ### Desktop
 <img height="926" src="screenshots/desk1.png" width="459"/>
 
-<img height="1080" src="screenshots/desk2.png" width="1920"/>
+<img src="screenshots/desk2.png"/>
 
-<img height="1080" src="screenshots/desk3.png" width="1920"/>
+<img  src="screenshots/desk3.png" />
 
 <img height="926" src="screenshots/desk4.png" width="459"/>
 <img height="926" src="screenshots/desk5.png" width="459"/>
