@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    networks:
+      - coinx-app-network
+
+  wallet-service:
+    image: pascarl/wallet-service:latest  # Replace with your image name or tag if different
+    container_name: wallet-service
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - wallet-service-network
+    volumes:
+      - ./app_data:/app_data  # Optional: Volume to persist application data if required
+
+  redis-server:
+    image: redis:latest
+    container_name: redis-server
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - wallet-service-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - wallet-service-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "8080:8080"
+    environment:
+      - 'GF_SMTP_ENABLED=true'
+      - 'GF_SMTP_HOST=smtp.resend.com:587'
+      - 'GF_SMTP_USER=resend'
+      - 'GF_SMTP_PASSWORD=re_WVuFt8YL_NstNAqGMQEjCUXLY5TSkHn45'
+      - 'GF_SMTP_FROM_ADDRESS=grafana@coinx.co.ke'
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_ROOT_URL=https://monitor.coinx.co.ke
+    networks:
+      - wallet-service-network
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    networks:
+      - wallet-service-network
+    deploy:
+      mode: global
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - wallet-service-network
+
+volumes:
+  grafana_data:
+networks:
+  wallet-service-network:
+    external: true
+

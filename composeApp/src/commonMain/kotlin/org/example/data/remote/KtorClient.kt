@@ -28,7 +28,7 @@ object KtorClient {
             accept(ContentType.Application.Json)
         }
     }
-    var baseUrl = "http://52.57.41.193"
+    //var baseUrl = "http://52.57.41.193"
     //var baseUrl = "http://192.168.0.105:8081"
-    //var baseUrl = "http://0.0.0.0:8081"
+    var baseUrl = "http://0.0.0.0:8081"
 }

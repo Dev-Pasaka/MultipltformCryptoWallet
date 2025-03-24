@@ -19,8 +19,12 @@ import org.example.project.plugins.corsConfiguration
 import kotlin.time.Duration.Companion.seconds
 
 fun main() {
-    embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
+    embeddedServer(
+        Netty,
+        port = SERVER_PORT,
+        host = "0.0.0.0",
+        module = Application::module
+    ).start(wait = true)
 }
 
 fun Application.module() {

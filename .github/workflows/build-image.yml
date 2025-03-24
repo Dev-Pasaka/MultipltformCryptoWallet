@@ -40,7 +40,7 @@ jobs:
 
       # Build the Docker image
       - name: Build Docker image
-        run: docker build -t ${DOCKER_HUB_USERNAME}/smartpesa:latest .
+        run: docker build -t ${DOCKER_HUB_USERNAME}/wallet-service:latest .
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
