@@ -31,6 +31,6 @@ jobs:
             # Navigate to the smart-pesa directory
             cd wallet-service || exit
             # Pull and start the Docker containers in detached mode
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose down && docker compose up -d
           EOF
